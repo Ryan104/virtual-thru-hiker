@@ -1,0 +1,29 @@
+{
+  "name": "virtual-thru-hiker",
+  "version": "1.0.0",
+  "description": "Hike more everyday by virtually hiking the AT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ryan104/virtual-thru-hiker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ryan104/virtual-thru-hiker/issues"
+  },
+  "homepage": "https://github.com/Ryan104/virtual-thru-hiker#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongoose": "^4.12.3"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "gulp": "^3.9.1",
+    "mocha": "^4.0.1"
+  }
+}
