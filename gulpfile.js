@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass');
+const babel = require('gulp-babel');
 const nodemon = require('gulp-nodemon');
 
 gulp.task('default', () => {
@@ -14,11 +15,21 @@ gulp.task('styles', () => {
 		.pipe(gulp.dest('./public/styles/'));
 });
 
+gulp.task('scripts', () => { //convert es6 to 
+	console.log('compiling js');
+	gulp.src('src/js/**/*.js')
+		.pipe(babel({
+			presets: ['es2015']
+		}))
+		.pipe(gulp.dest('./public/javascript/'));
+});
+
 gulp.task('start', function () {
   nodemon({
 	script: 'index.js',
 	ext: 'js html scss hbs',
+	ignore: ['public/javascript/*'], // ignore processed files
 	env: { 'NODE_ENV': 'development' },
-	tasks: ['styles']
+	tasks: ['styles', 'scripts']
   });
 });
