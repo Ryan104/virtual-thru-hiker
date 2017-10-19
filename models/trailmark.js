@@ -3,12 +3,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const TrailmarkSchema = Schema({
+const TrailmarkSchema = new Schema({
 	name: String,
 	type: String,
 	location: {
-		lat: String, 
-		lon: String
+		lat: Number, 
+		lon: Number
 	},
 	toStart: Number,
 	toEnd: Number,
