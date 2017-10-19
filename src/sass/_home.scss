@@ -23,9 +23,9 @@ main {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+	}
 
-		.btn {
-			width: 300px;
-		}
+	.google-login-link{
+		max-width: 300px;
 	}
 }
