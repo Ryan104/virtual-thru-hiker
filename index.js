@@ -18,7 +18,7 @@ hbs.localsAsTemplateData(app); // allow locals to be accessed from templates wit
 
 // Serve static files in public folder
 // NOTE: Run gulp to compile sass
-app.use(express.static('public'));
+app.use(express.static('./public'));
 
 
 app.get('/', (req, res) => {
