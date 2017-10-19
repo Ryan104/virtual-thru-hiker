@@ -25,7 +25,11 @@ main {
 		align-items: center;
 	}
 
-	.google-login-link{
-		max-width: 300px;
+	.google-login-link {
+		cursor: pointer;
+
+		img {
+			max-width: 300px;
+		}
 	}
 }

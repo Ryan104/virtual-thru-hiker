@@ -19,4 +19,6 @@ main .get-started {
   align-items: center; }
 
 main .google-login-link {
-  max-width: 300px; }
+  cursor: pointer; }
+  main .google-login-link img {
+    max-width: 300px; }
