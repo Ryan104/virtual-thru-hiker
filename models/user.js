@@ -2,7 +2,16 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Goal = new Schema({
-
+	start: {
+		date: { type: Date, default: Date.now },
+		distance: Number
+	},
+	target: {
+		name: String,
+		date: Date,
+		distance: Number
+	},
+	complete: String // true, false, in-progress
 });
 
 const User = new Schema({
@@ -25,28 +34,3 @@ const User = new Schema({
 });
 
 module.exports = User;
-
-
-
-/*
-USER
-GoogleId: (google)
-accessToken: google
-Name: String (google)
-Email: String (google)
-Start Date: Date (default Date.now())
-Total Steps: number
-Last Update: Date
-Personal Goals: Embeded Goals Model (Mongo IDs)
-
-Method:
-Calculate miles: from steps
-
-GOAL
-Date Created: Date default now()
-Target Date: Date (user input)
-Destination: reference data Checkpoint
-Progress: Completed, Failed, In progress
-
-
-*/
