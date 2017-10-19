@@ -17,6 +17,13 @@
 	<script src="javascript/app.js"></script>
 </head>
 <body>
-	<h1>Welcome {{name}}</h1>
+	{{> home_nav}}
+	{{> home_jumbotron}}
+	<main class="container">
+		{{> home_signin_button}}
+		{{> home_about}}
+		{{> home_contact_form}}
+	</main>
+	{{> home_footer}}
 </body>
 </html>
