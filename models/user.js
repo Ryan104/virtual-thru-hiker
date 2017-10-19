@@ -26,11 +26,11 @@ const User = new Schema({
 		accessToken: String
 	},
 	fitData: {
-		lastUpdate: Date, // time of last update from fit API
+		lastUpdate: { type: Date, default: Date.now}, // time of last update from fit API
 		totalSteps: { type: Number, default: 0 },
 		totalDistance: { type: Number, default: 0 } // distance in miles (calc from steps)
 	},
 	goals: [Goal]
 });
 
-module.exports = User;
+module.exports = mongoose.model('User', User);
