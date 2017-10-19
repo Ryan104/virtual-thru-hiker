@@ -9,3 +9,4 @@ mongoose.connect( process.env.MONGODB_URI ||
                   );
 
 module.exports.Trailmark = require('./trailmark');
+module.exports.User = require('./user');
