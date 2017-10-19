@@ -38,41 +38,13 @@ hbs.localsAsTemplateData(app); // allow locals to be accessed from templates wit
 
 
 // Serve static files in public folder
-// NOTE: Run gulp to compile sass
 app.use(express.static('./public'));
 
 
 /*
  * Routes
  */
-
-app.get('/', (req, res) => {
-	console.log('get / route hit');
-	res.render('index');
-});
-
-app.get('/app', (req, res) => {
-	console.log(res.locals.currentUser);
-	res.render('app', {user: res.locals.currentUser});
-});
-
-app.get('/auth/google',
-	passport.authenticate('google', {
-		scope:
-			[
-			'profile',
-			'email',
-			'https://www.googleapis.com/auth/fitness.activity.read'
-			]
-		}
-	)
-);
-
-app.get('/auth/google/callback',
-	passport.authenticate('google', {
-		successRedirect: '/app',
-		failureRedirect: '/' //TODO: redirect failure to login page with flash msg
-	})
-);
+const routes = require('./config/routes');
+app.use(routes);
 
 app.listen(process.env.PORT || 3000, () => (console.log('process up and running')));
