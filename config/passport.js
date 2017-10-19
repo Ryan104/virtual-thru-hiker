@@ -30,13 +30,13 @@ function callback(request, accessToken, refreshToken, profile, done){
 	// Look for user in db
 	//	- Log user in if already exists
 	//	- Create new user if not already in db
-	db.User.findOne({ googleId: profile.id }, (err, user) => {
+	db.User.findOne({ 'google.id': profile.id }, (err, user) => {
 		if (err) return done(err);
 
 		if (user){
 			// returning user
 			console.log('logging in user: ' + profile.id);
-			user.local.accessToken = accessToken; //save new access token
+			user.google.accessToken = accessToken; //save new access token
 			user.save(err => {
 				if (err) return console.log(err);
 				console.log('user logged in!');
