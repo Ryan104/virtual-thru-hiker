@@ -1,7 +1,7 @@
 'use strict';
 
 var totalMiles = 0;
-var trailTotal = 2174.6;
+var trailTotal = 2175;
 
 $(document).ready(function () {
 	console.log('js/jquery loaded');

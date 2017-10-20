@@ -22,4 +22,10 @@ const googleCallback = (req, res, next) => {
 	return authCallbackStrategy(req,res,next);
 };
 
-module.exports = { googleLogin, googleCallback };
+const logout = (req, res, next) => {
+	req.logout();
+	res.redirect('/');
+	//TODO: flash message - logged out
+};
+
+module.exports = { googleLogin, googleCallback, logout };

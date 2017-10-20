@@ -18,6 +18,9 @@ router.route('/auth/google')
 router.route('/auth/google/callback')
 	.get(controllers.auth.googleCallback);
 
+router.route('/auth/logout')
+	.get(controllers.auth.logout);
+
 module.exports = router;
 
 

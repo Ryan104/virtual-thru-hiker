@@ -1,5 +1,5 @@
 let totalMiles = 0;
-const trailTotal = 2174.6;
+const trailTotal = 2175;
 
 $(document).ready(() => {
 	console.log('js/jquery loaded');
