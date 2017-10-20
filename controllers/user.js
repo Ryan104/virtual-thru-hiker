@@ -3,6 +3,8 @@ const baseApiUrl = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/d
 const keyParam = '?key=' + process.env.FIT_API_KEY;
 const db = require('../models');
 
+const testing = true; // prevents excessive api calls, change to false to get real data
+
 // This route returns the latest user walking data by contacting the fit api
 // It responds with a JSON file containing the users current total distance
 const getFitData = (req, res) => {
@@ -23,6 +25,8 @@ const getFitData = (req, res) => {
 	};
 	
 	// make api call
+	if (!testing){
+
 	request(options, (err, response, body) => {
 		if (err) return console.log(err);
 		
@@ -51,10 +55,13 @@ const getFitData = (req, res) => {
 				console.log(user.fitData.totalSteps);
 
 				// data sent to user
-				// TODO: respond with rendered profile page
 				res.json({'totalDistance': user.getTotalDistance()});
 			});
-		});
+	});
+	} else {
+		// NOTE: SENDING FAKE DATA FOR TESTING
+		res.json({'totalDistance': 225.34521});
+	}
 };
 
 module.exports = { getFitData };

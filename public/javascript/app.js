@@ -10,13 +10,8 @@ $(document).ready(function () {
 	$.ajax({
 		url: '/user/totalmiles',
 		success: function success(res) {
-			console.log(res);
-			totalMiles = res.totalDistance;
-			var percentComplete = (totalMiles / trailTotal).toFixed(2);
-			if (percentComplete < 1) {
-				percentComplete = 1;
-			}
-			console.log('% complete: ' + percentComplete);
+			totalMiles = res.totalDistance.toFixed(1);
+			updateProgBar();
 		}
 	});
 
@@ -24,3 +19,12 @@ $(document).ready(function () {
 
 	// get upcomming trailmarks
 });
+
+function updateProgBar() {
+	var percent = (totalMiles / trailTotal * 100).toFixed(2);
+	if (percent < 1) percent = 1; // minimum percent is 1 so something shows on bar
+
+	// Update Bar
+	$('#prog-total-mi').empty().append(totalMiles);
+	$('#main-progbar').attr('style', 'width: ' + percent + '%; height: 50px;');
+}
