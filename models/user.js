@@ -11,7 +11,7 @@ const GoalSchema = new Schema({
 		date: Date,
 		distance: Number
 	},
-	complete: String // true, false, in-progress
+	complete: Boolean
 });
 
 const UserSchema = new Schema({

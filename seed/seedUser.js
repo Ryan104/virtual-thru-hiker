@@ -18,7 +18,21 @@ db.User.remove({}, err => {
 	        "email" : "ryan.d.elliott@gmail.com",
 	        "image" : "https://lh4.googleusercontent.com/-MbWe9Kuwfp0/AAAAAAAAAAI/AAAAAAAAJbg/YJ14gJRtI18/photo.jpg?sz=50",
 	        "startDate" : new Date("2017-10-19T21:22:56.485Z")
-	    }
+	    },
+	    "goals": [
+	    	{
+	    		start: {
+	    			date: new Date("2017-10-19T21:22:56.485Z"),
+	    			distance: 0
+	    		},
+	    		target: {
+	    			name: "Gooch Mountain Shelter",
+	    			date: new Date("2017-10-24T21:22:56.485Z"),
+	    			distance: 14.9
+	    		},
+	    		complete: false
+	    	}
+	    ]
 	}, (err, user) => {
 		console.log('user created');
 	    });
