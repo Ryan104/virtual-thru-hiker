@@ -23,20 +23,23 @@ const getFitData = (req, res) => {
 		let data = JSON.parse(body).point;
 		console.log(data.length);
 		let steps = totalSteps(data);
+		// TODO: add steps to user steps and change lastUpdate to now
 		res.json({'steps': steps});
 	});
 };
 
+// take data from fit api call and reduce into total steps
 function totalSteps(data){
 	let total = 0;
 	console.log('length: ' + data.length);
-	//console.log(data[0].value[0].intVal);
+	//TODO: use reduce instead of foreach
 	data.forEach(point => {
 		total += point.value[0].intVal;
 	});
 	return total;
 }
 
+// convert time to nanoseconds (required by fit API)
 function convertToNanoS(dateStr){
 	const date = new Date(dateStr);
 	const dateNano = date.getTime() * 1000000;
