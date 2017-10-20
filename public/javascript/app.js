@@ -15,8 +15,6 @@ $(document).ready(function () {
 		}
 	});
 
-	// get user goals
-
 	// get upcomming trailmarks
 });
 
@@ -27,4 +25,21 @@ function updateProgBar() {
 	// Update Bar
 	$('#prog-total-mi').empty().append(totalMiles);
 	$('#main-progbar').attr('style', 'width: ' + percent + '%; height: 50px;');
+}
+
+// this function gets all the goals
+function getGoals() {
+	$.ajax({
+		url: '/user/goals',
+		success: function success(res) {
+			updateGoalCards(res);
+		}
+	});
+	renderGoalCards();
+}
+
+// this function renders the goal cards 
+function renderGoalCards(goalArr) {
+	// clear $('#goalContailer')
+	// for each goal in goals array, create a new goal card and append to goal container
 }

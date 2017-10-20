@@ -18,7 +18,7 @@
 </head>
 <body class="app-body">
 
-	{{> app_nav}}
+	{{> app_nav name=user.profile.name}}
 	
 	<main class="container">
 		<div class="row justify-content-center">
@@ -32,7 +32,7 @@
 
 				<h4>My Goals:</h4>
 				<button class="btn btn-outline-primary">SET A GOAL</button>
-				{{> app_goal_cards}}
+				{{> app_goal_cards goals=goalCards}}
 
 			</div>
 			<div class="col-md-6">
