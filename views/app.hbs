@@ -16,18 +16,30 @@
 	<link rel="stylesheet" href="styles/main.css">
 	<script src="javascript/app.js"></script>
 </head>
-<body>
+<body class="app-body">
+
 	{{> app_nav}}
 	
 	<main class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-6 col-md-8">
+				{{> app_mainProgBar}}
+			</div>
+		</div>
 
-	<!-- PROG BAR
-		1. Display the currently available distance data in the prog bar 
-		2. Make the API call to get the updated data
-		3. User jquery/ajax to update the prog bar
-	-->
-	{{> app_mainProgBar}}
+		<div class="row">
+			<div class="col-md-6">
 
+				<h4>My Goals:</h4>
+				<button class="btn btn-outline-primary">SET A GOAL</button>
+				{{> app_goal_cards}}
+
+			</div>
+			<div class="col-md-6">
+
+				<h4>Nearby:</h4>
+			</div>
+		</div>
 	<!-- GOALS
 		1. Render the current goals
 		2. Use jQuery to make ajax call and update goal progress

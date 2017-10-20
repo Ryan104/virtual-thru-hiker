@@ -22,3 +22,10 @@ main .google-login-link {
   cursor: pointer; }
   main .google-login-link img {
     max-width: 300px; }
+
+.card {
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 5px #333; }
+
+.app-body {
+  background-color: #eee; }
