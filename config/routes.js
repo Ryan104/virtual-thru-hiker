@@ -9,7 +9,7 @@ router.route('/app')
 		res.render('app', {user: res.locals.currentUser});
 	});
 
-router.route('/user')
+router.route('/user/totalmiles')
 	.get(authenticatedUser, controllers.user.getFitData);
 
 router.route('/auth/google')
