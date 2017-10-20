@@ -3,6 +3,8 @@ const baseApiUrl = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/d
 const keyParam = '?key=' + process.env.FIT_API_KEY;
 const db = require('../models');
 
+// This route returns the latest user walking data by contacting the fit api
+// It responds with a JSON file containing the users current total distance
 const getFitData = (req, res) => {
 	// setup API call
 	let startTime = convertToNanoS(res.locals.currentUser.fitData.lastUpdate);
@@ -48,10 +50,19 @@ const getFitData = (req, res) => {
 				if (err) return console.log(err);
 				console.log(user.fitData.totalSteps);
 
+				// data sent to user
+				// TODO: respond with rendered profile page
 				res.json({'totalDistance': user.getTotalDistance()});
 			});
 		});
 };
+
+module.exports = { getFitData };
+
+
+//****************
+//HELPER FUNCTIONS
+//****************
 
 // take data from fit api call and reduce into total steps
 function totalSteps(data){
@@ -70,5 +81,3 @@ function convertToNanoS(dateStr){
 	const dateNano = date.getTime() * 1000000;
 	return dateNano;
 }
-
-module.exports = { getFitData };
