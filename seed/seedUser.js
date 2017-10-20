@@ -31,6 +31,30 @@ db.User.remove({}, err => {
 	    			distance: 14.9
 	    		},
 	    		complete: false
+	    	},
+	    	{
+	    		start: {
+	    			date: new Date("2017-10-20T21:22:56.485Z"),
+	    			distance: 0
+	    		},
+	    		target: {
+	    			name: "Far Away Place",
+	    			date: new Date("2017-10-28T21:22:56.485Z"),
+	    			distance: 26.2
+	    		},
+	    		complete: false
+	    	},
+	    	{
+	    		start: {
+	    			date: new Date("2017-10-19T21:22:56.485Z"),
+	    			distance: 1
+	    		},
+	    		target: {
+	    			name: "Gooch Mountain Shelter",
+	    			date: new Date("2017-10-20T21:22:56.485Z"),
+	    			distance: 5
+	    		},
+	    		complete: true
 	    	}
 	    ]
 	}, (err, user) => {
