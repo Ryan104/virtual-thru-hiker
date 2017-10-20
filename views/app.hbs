@@ -17,14 +17,16 @@
 	<script src="javascript/app.js"></script>
 </head>
 <body>
-	{{> home_nav}}
-	<h1>Hi {{user.profile.name}}</h1>
+	{{> app_nav}}
+	
+	<main class="container">
 
 	<!-- PROG BAR
 		1. Display the currently available distance data in the prog bar 
 		2. Make the API call to get the updated data
 		3. User jquery/ajax to update the prog bar
 	-->
+	{{> app_mainProgBar}}
 
 	<!-- GOALS
 		1. Render the current goals
@@ -35,6 +37,6 @@
 	<!-- UPCOMING POINTS
 		1. Leave a place for upcomming points and use jquery to make AJAX call and render them on page
 	-->
-	
+	</main>
 </body>
 </html>
