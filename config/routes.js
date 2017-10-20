@@ -5,9 +5,7 @@ router.route('/')
 	.get(controllers.statics.home);
 
 router.route('/app')
-	.get(authenticatedUser, (req, res) => {
-		res.render('app', {user: res.locals.currentUser});
-	});
+	.get(authenticatedUser, controllers.app.renderApp);
 
 router.route('/user/totalmiles')
 	.get(authenticatedUser, controllers.user.getFitData);

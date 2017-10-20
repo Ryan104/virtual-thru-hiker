@@ -11,8 +11,20 @@ const GoalSchema = new Schema({
 		date: Date,
 		distance: Number
 	},
-	complete: String // true, false, in-progress
+	complete: Boolean
 });
+
+GoalSchema.methods.getTargetDayString = function(){
+	// return the target day as a string (ie 10/23/17)
+};
+
+GoalSchema.methods.getDateDiff = function(){
+	// return the difference in days between start.data and target.date
+};
+
+GoalSchema.methods.formatCardText = function(){
+	// return the object with cardTitle and cardBody string
+};
 
 const UserSchema = new Schema({
 	profile: {
