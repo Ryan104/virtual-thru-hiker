@@ -22,7 +22,6 @@ $(document).ready(() => {
 
 	// post new goal
 	$('#newGoalModal').on('click', '#saveNewGoal', function(){
-		console.log('clicked');
 		let formContent = $(this).closest('.modal').find('form').serialize();
 		console.log(formContent);
 		// post form content
@@ -34,6 +33,18 @@ $(document).ready(() => {
 	});
 
 	// delete goal (delete)
+	$('#goalContainer').on('click', '.delete-goal', function(){
+		console.log('clicked delete');
+		let goalId = $(this).closest('.card').attr('data-id');
+		console.log(goalId);
+		$.ajax({
+			method: 'DELETE',
+			url: '/user/goals/' + goalId,
+			success: function(res){
+				console.log(res);
+			}
+		});
+	});
 
 	// mark goal complete (Put call)
 
@@ -71,8 +82,8 @@ function renderGoalCard(goalData){
 	if (goalData.complete){
 		footer = `<div class="alert alert-success" role="alert">Complete</div>`;
 	} else {
-		footer = `<button class="btn btn-success">Mark Complete</button>
-					<button class="btn btn-danger">Delete Goal</button>`;
+		footer = `<button class="btn btn-success complete-goal">Mark Complete</button>
+					<button class="btn btn-danger delete-goal">Delete Goal</button>`;
 	}
 
 	return `

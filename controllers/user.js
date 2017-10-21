@@ -101,13 +101,22 @@ const postGoal = (req,res) => {
 const deleteGoal = (req, res) => {
 	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
 		if (err) return console.log(err);
-		// find the 
+		console.log(req.params.id);
+		let goalIndex = user.goals.findIndex((goal) => {
+			return goal._id == req.params.id;
+		});
+		console.log(goalIndex);
+		user.goals.splice(goalIndex, 1);
+		user.save(err => {
+			if (err) throw err;
+			res.json({message: 'goal deleted'});
+		});
 	});
 };
 
 
 
-module.exports = { getFitData, postGoal };
+module.exports = { getFitData, postGoal, deleteGoal };
 
 
 //****************

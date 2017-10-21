@@ -24,7 +24,6 @@ $(document).ready(function () {
 
 	// post new goal
 	$('#newGoalModal').on('click', '#saveNewGoal', function () {
-		console.log('clicked');
 		var formContent = $(this).closest('.modal').find('form').serialize();
 		console.log(formContent);
 		// post form content
@@ -36,6 +35,18 @@ $(document).ready(function () {
 	});
 
 	// delete goal (delete)
+	$('#goalContainer').on('click', '.delete-goal', function () {
+		console.log('clicked delete');
+		var goalId = $(this).closest('.card').attr('data-id');
+		console.log(goalId);
+		$.ajax({
+			method: 'DELETE',
+			url: '/user/goals/' + goalId,
+			success: function success(res) {
+				console.log(res);
+			}
+		});
+	});
 
 	// mark goal complete (Put call)
 });
@@ -73,7 +84,7 @@ function renderGoalCard(goalData) {
 	if (goalData.complete) {
 		footer = '<div class="alert alert-success" role="alert">Complete</div>';
 	} else {
-		footer = '<button class="btn btn-success">Mark Complete</button>\n\t\t\t\t\t<button class="btn btn-danger">Delete Goal</button>';
+		footer = '<button class="btn btn-success complete-goal">Mark Complete</button>\n\t\t\t\t\t<button class="btn btn-danger delete-goal">Delete Goal</button>';
 	}
 
 	return '\n\t\t<div class="card" data-id="' + goalData._id + '">\n\t\t\t<div class="card-body">\n\t\t\t\t<h4 class="card-title">Reach ' + goalData.target.name + ' by ' + date + '</h4>\n\t\t\t\t<p class="card-text">From ' + goalData.start.distance + ' to ' + goalData.target.distance + '</p>\n\t\t\t\t' + footer + '\n\t\t\t</div>\n\t\t</div>\n\t';

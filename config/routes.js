@@ -12,9 +12,12 @@ router.route('/user/totalmiles')
 
 router.route('/user/goals')
 	.get(authenticatedUser, (req, res) => res.json({'message': 'nothing to see here'}))
-	.post(controllers.user.postGoal)
-	.delete(authenticatedUser, (req, res) => res.json({'message': 'nothing to see here'}));
+	.post(authenticatedUser, controllers.user.postGoal);
 	// authenticate users before allowing goals routes
+
+router.route('/user/goals/:id')
+	.delete(authenticatedUser, controllers.user.deleteGoal);
+
 router.route('/auth/google')
 	.get(controllers.auth.googleLogin);
 
