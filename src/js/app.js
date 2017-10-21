@@ -14,8 +14,16 @@ $(document).ready(() => {
 	});
 
 	// get upcomming trailmarks
+	$('#newGoalBtn').on('click', function(){
+		console.log('click');
+		$('#newGoalModal').modal();
+	});
 
 });
+
+/*
+ * CLICK LISTENERS
+ */
 
 function updateProgBar(){
 	let percent = (totalMiles/trailTotal * 100).toFixed(2);

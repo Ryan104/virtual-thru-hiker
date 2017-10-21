@@ -31,7 +31,7 @@
 			<div class="col-md-6">
 
 				<h4>My Goals:</h4>
-				<button class="btn btn-outline-primary">SET A GOAL</button>
+				<button id="newGoalBtn" class="btn btn-outline-primary">SET A GOAL</button>
 				{{> app_goal_cards goals=goalCards}}
 
 			</div>
@@ -50,6 +50,9 @@
 	<!-- UPCOMING POINTS
 		1. Leave a place for upcomming points and use jquery to make AJAX call and render them on page
 	-->
+
+	<!-- MODALS -->
+	{{> app_modal_newGoal}}
 	</main>
 </body>
 </html>
