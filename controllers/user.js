@@ -64,7 +64,23 @@ const getFitData = (req, res) => {
 	}
 };
 
-module.exports = { getFitData };
+//*****
+//GOAL CONTROLLERS
+//********
+
+const postGoal = (req,res) => {
+	// req should contain json with goal name, target date, target miles
+	db.User.find({"google.id": res.locals.currentUser.google.id}, (err, user) => {
+		if (err) return console.log(err);
+		let newGoal = {}
+		// User.goals.push(newGoal)
+		// User.save();
+		// res.json(newGoal);
+		// save new goal to db and return new goal response
+	});
+};
+
+module.exports = { getFitData, postGoal };
 
 
 //****************
