@@ -37,13 +37,15 @@ $(document).ready(function () {
 	// delete goal (delete)
 	$('#goalContainer').on('click', '.delete-goal', function () {
 		console.log('clicked delete');
-		var goalId = $(this).closest('.card').attr('data-id');
+		var $goalCard = $(this).closest('.card');
+		var goalId = $goalCard.attr('data-id');
 		console.log(goalId);
 		$.ajax({
 			method: 'DELETE',
 			url: '/user/goals/' + goalId,
 			success: function success(res) {
 				console.log(res);
+				$goalCard.remove();
 			}
 		});
 	});
