@@ -28,6 +28,8 @@ $(document).ready(() => {
 		// post form content
 		$.post('/user/goals?' + formContent, function(response){
 			console.log(response);
+			// prepend new goal to goals list
+			$('#goalContainer').prepend(renderGoalCard(response));
 		});
 	});
 
@@ -51,18 +53,35 @@ function updateProgBar(){
 }
 
 // this function gets all the goals
-function getGoals(){
+function getGoals(){ // TODO: THIS - it doesnt work yet
 	$.ajax({
 		url: '/user/goals',
 		success: (res) => {
 			updateGoalCards(res);
 		}
 	});
-	renderGoalCards();
+	//renderGoalCards();
 }
 
-// this function renders the goal cards 
-function renderGoalCards(goalArr){
-	// clear $('#goalContailer')
-	// for each goal in goals array, create a new goal card and append to goal container
+// this function renders the a goal card
+function renderGoalCard(goalData){
+	let date = (new Date(goalData.target.date)).toLocaleDateString();
+
+	let footer;
+	if (goalData.complete){
+		footer = `<div class="alert alert-success" role="alert">Complete</div>`;
+	} else {
+		footer = `<button class="btn btn-success">Mark Complete</button>
+					<button class="btn btn-danger">Delete Goal</button>`;
+	}
+
+	return `
+		<div class="card" data-id="${goalData._id}">
+			<div class="card-body">
+				<h4 class="card-title">Reach ${goalData.target.name} by ${date}</h4>
+				<p class="card-text">From ${goalData.start.distance} to ${goalData.target.distance}</p>
+				${footer}
+			</div>
+		</div>
+	`;
 }
