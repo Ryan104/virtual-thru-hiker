@@ -10,11 +10,11 @@ router.route('/app')
 router.route('/user/totalmiles')
 	.get(authenticatedUser, controllers.user.getFitData);
 
-router.route('user/goals')
+router.route('/user/goals')
 	.get(authenticatedUser, (req, res) => res.json({'message': 'nothing to see here'}))
-	.post(authenticatedUser, controllers.user.postGoal)
+	.post(controllers.user.postGoal)
 	.delete(authenticatedUser, (req, res) => res.json({'message': 'nothing to see here'}));
-
+	// authenticate users before allowing goals routes
 router.route('/auth/google')
 	.get(controllers.auth.googleLogin);
 

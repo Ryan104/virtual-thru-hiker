@@ -25,7 +25,7 @@ const getFitData = (req, res) => {
 	};
 	
 	// make api call
-	if (!testing){
+	if (!testing){ // collect data from fit api
 
 	request(options, (err, response, body) => {
 		if (err) return console.log(err);
@@ -64,21 +64,48 @@ const getFitData = (req, res) => {
 	}
 };
 
-//*****
+//***********
 //GOAL CONTROLLERS
-//********
+//*************
 
 const postGoal = (req,res) => {
 	// req should contain json with goal name, target date, target miles
-	db.User.find({"google.id": res.locals.currentUser.google.id}, (err, user) => {
+	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
 		if (err) return console.log(err);
-		let newGoal = {}
-		// User.goals.push(newGoal)
-		// User.save();
-		// res.json(newGoal);
+		// process the query string (get name and milage from str format 'name - nn.n mi')
+		let targetName = req.query.name.split(' - ')[0];
+		let targetDistance = parseFloat(req.query.name.split(' - ')[1]);
+		// create a new goal
+		let newGoal = {
+			start: {
+				distance: user.getTotalDistance()
+			},
+			target: {
+				name: targetName,
+				date: new Date(req.query.date),
+				distance: targetDistance
+			},
+			complete: false
+		};
+		// add goal to user document
+		user.goals.push(newGoal);
+		user.save(function(err){
+			newGoal = user.goals[user.goals.length -1]
+			console.log(newGoal);
+			res.json(newGoal);
+		});
 		// save new goal to db and return new goal response
 	});
 };
+
+const deleteGoal = (req, res) => {
+	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
+		if (err) return console.log(err);
+		// find the 
+	});
+};
+
+
 
 module.exports = { getFitData, postGoal };
 

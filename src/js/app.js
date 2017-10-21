@@ -14,10 +14,26 @@ $(document).ready(() => {
 	});
 
 	// get upcomming trailmarks
+
+	// open newgoal modal
 	$('#newGoalBtn').on('click', function(){
-		console.log('click');
 		$('#newGoalModal').modal();
 	});
+
+	// post new goal
+	$('#newGoalModal').on('click', '#saveNewGoal', function(){
+		console.log('clicked');
+		let formContent = $(this).closest('.modal').find('form').serialize();
+		console.log(formContent);
+		// post form content
+		$.post('/user/goals?' + formContent, function(response){
+			console.log(response);
+		});
+	});
+
+	// delete goal (delete)
+
+	// mark goal complete (Put call)
 
 });
 

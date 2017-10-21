@@ -3,30 +3,32 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Set a new goal</h5>
+        <h5 class="modal-title" id="newGoalModalLabel">Set a new goal</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form>
+        <fieldset>
           <div class="form-group">
             <label for="goalNameSelect">Choose A Destination</label>
-            <select class="form-control" type="text" id="goalNameSelet">
+            <select class="form-control" name="name" type="text" id="goalNameSelect">
               {{#each trailOptions}}
-                <option>{{name}} (@{{mileMark}} mi)</option>
+                <option>{{name}} - {{mileMark}} mi</option>
               {{/each}}
             </select>
           </div>
           <div class="form-group">
             <label for="goalDateSelect">When do you want to get there?</label>
-            <input id="goalDateSelect" type="date"></input>
+            <input id="goalDateSelect" name="date" type="date"></input>
           </div>
+        </fieldset>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+        <button id="saveNewGoal" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
       </div>
     </div>
   </div>
