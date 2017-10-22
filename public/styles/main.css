@@ -23,9 +23,48 @@ main .google-login-link {
   main .google-login-link img {
     max-width: 300px; }
 
-.card {
-  margin-bottom: 20px;
-  box-shadow: 2px 2px 5px #333; }
-
 .app-body {
   background-color: #eee; }
+
+.goalButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; }
+  .goalButtons .btn {
+    min-width: 170px; }
+
+/* Cards */
+.card {
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 5px #333;
+  animation: fadeup 1s;
+  position: relative; }
+
+.main-prog-card {
+  animation: none; }
+
+@keyframes fadeup {
+  from {
+    opacity: 0;
+    bottom: -60px; }
+  to {
+    opacity: 1;
+    bottom: 0px; } }
+
+/* Loading spinner */
+.loading {
+  position: absolute;
+  left: 50%;
+  top: 150%;
+  height: 3em;
+  width: 3em;
+  border: 6px solid #333;
+  border-top-color: #ccc;
+  border-radius: 50%;
+  animation: spin 2s linear infinite; }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }

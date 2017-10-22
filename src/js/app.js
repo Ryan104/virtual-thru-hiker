@@ -15,7 +15,89 @@ $(document).ready(() => {
 
 	// get upcomming trailmarks
 
+	// get and render all goals
+	
+	$.get('/user/goals', res => {
+		console.log(res);
+		$('#goalContainer').empty();
+		res.goals.forEach((goal) => {
+			$('#goalContainer').prepend(renderGoalCard(goal));
+		});
+	});
+
+	$('#hideComplete').on('click', function(){
+		let btn = $(this);
+		let currentState =  btn.attr('data-state');
+		console.log(currentState);
+		let completedCards = $('#goalContainer .alert-success').closest('.card');
+		console.log(completedCards);
+		if (currentState === 'visible'){
+			// hide
+			btn.attr('data-state', 'hidden');
+			btn.text('SHOW COMPLETED');
+			completedCards.fadeOut();
+		} else {
+			// show
+			btn.attr('data-state', 'visible');
+			btn.text('HIDE COMPLETED');
+			completedCards.show();
+		}
+	});
+
+
+	// open newgoal modal
+	$('#newGoalBtn').on('click', function(){
+		$('#newGoalModal').modal();
+	});
+
+	// post new goal
+	$('#newGoalModal').on('click', '#saveNewGoal', function(){
+		let formContent = $(this).closest('.modal').find('form').serialize();
+		console.log(formContent);
+		// post form content
+		$.post('/user/goals?' + formContent, function(response){
+			console.log(response);
+			// prepend new goal to goals list
+			$('#goalContainer').prepend(renderGoalCard(response));
+		});
+	});
+
+	// delete goal (delete)
+	$('#goalContainer').on('click', '.delete-goal', function(){
+		let $goalCard = $(this).closest('.card');
+		let goalId = $goalCard.attr('data-id');
+		console.log(goalId);
+		$.ajax({
+			method: 'DELETE',
+			url: '/user/goals/' + goalId,
+			success: function(res){
+				console.log(res);
+				$goalCard.remove();
+			}
+		});
+	});
+
+	// mark goal complete (Put call)
+	$('#goalContainer').on('click', '.complete-goal', function(){
+		console.log('clicked complete');
+		let $goalCard = $(this).closest('.card');
+		let goalId = $goalCard.attr('data-id');
+		$.ajax({
+			method: 'PUT',
+			url: '/user/goals/' + goalId,
+			data: {complete: true},
+			success: function(res){
+				console.log(res);
+				$goalCard.replaceWith(renderGoalCard(res));
+			}
+		});
+	});
+
 });
+
+/*
+ * CLICK LISTENERS
+ */
 
 function updateProgBar(){
 	let percent = (totalMiles/trailTotal * 100).toFixed(2);
@@ -27,18 +109,35 @@ function updateProgBar(){
 }
 
 // this function gets all the goals
-function getGoals(){
+function getGoals(){ // TODO: THIS - it doesnt work yet
 	$.ajax({
 		url: '/user/goals',
 		success: (res) => {
 			updateGoalCards(res);
 		}
 	});
-	renderGoalCards();
+	//renderGoalCards();
 }
 
-// this function renders the goal cards 
-function renderGoalCards(goalArr){
-	// clear $('#goalContailer')
-	// for each goal in goals array, create a new goal card and append to goal container
+// this function renders the a goal card
+function renderGoalCard(goalData){
+	let date = (new Date(goalData.target.date)).toLocaleDateString();
+
+	let footer;
+	if (goalData.complete){
+		footer = `<div class="alert alert-success" role="alert">Complete</div>`;
+	} else {
+		footer = `<button class="btn btn-success complete-goal">Mark Complete</button>
+					<button class="btn btn-danger delete-goal">Delete Goal</button>`;
+	}
+
+	return `
+		<div class="card" data-id="${goalData._id}">
+			<div class="card-body">
+				<h4 class="card-title">Reach ${goalData.target.name} by ${date}</h4>
+				<p class="card-text">From ${goalData.start.distance} to ${goalData.target.distance}</p>
+				${footer}
+			</div>
+		</div>
+	`;
 }

@@ -1,6 +1,13 @@
+<h4>My Goals:</h4>
+<div class="goalButtons">
+	<button id="newGoalBtn" data-state="visible" class="btn btn-outline-primary">SET A GOAL</button>
+	<button id="hideComplete" class="btn btn-outline-info">HIDE COMPLETED</button>
+</div>
 <div id="goalContainer">
+	<!-- pre-render goals -->
+	<!--
 	{{#each goals}}
-	<div class="card" data-id="${{goalId}}">
+	<div class="card" data-id="{{goalId}}">
 		<div class="card-body">
 			<h4 class="card-title">{{titleText}}</h4>
 			<p class="card-text">{{bodyText}}</p>
@@ -9,10 +16,13 @@
 				Complete
 			</div>
 			{{else}}
-			<button class="btn btn-success">Mark Complete</button>
-			<button class="btn btn-danger">Delete Goal</button>
+			<button class="btn btn-success complete-goal">Mark Complete</button>
+			<button class="btn btn-danger delete-goal">Delete Goal</button>
 			{{/if}}
 		</div>
 	</div>
 	{{/each}}
+	-->
+	<!-- Or.... Show spinner because they are just gonna get replaced  anyway -->
+	<div class="loading"></div>
 </div>
