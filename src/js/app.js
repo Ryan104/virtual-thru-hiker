@@ -43,7 +43,6 @@ $(document).ready(() => {
 
 	// delete goal (delete)
 	$('#goalContainer').on('click', '.delete-goal', function(){
-		console.log('clicked delete');
 		let $goalCard = $(this).closest('.card');
 		let goalId = $goalCard.attr('data-id');
 		console.log(goalId);
@@ -58,6 +57,20 @@ $(document).ready(() => {
 	});
 
 	// mark goal complete (Put call)
+	$('#goalContainer').on('click', '.complete-goal', function(){
+		console.log('clicked complete');
+		let $goalCard = $(this).closest('.card');
+		let goalId = $goalCard.attr('data-id');
+		$.ajax({
+			method: 'PUT',
+			url: '/user/goals/' + goalId,
+			data: {complete: true},
+			success: function(res){
+				console.log(res);
+				$goalCard.replaceWith(renderGoalCard(res));
+			}
+		});
+	});
 
 });
 

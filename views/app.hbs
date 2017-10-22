@@ -30,16 +30,18 @@
 		<div class="row">
 			<div class="col-md-6">
 
-				<h4>My Goals:</h4>
-				<button id="newGoalBtn" class="btn btn-outline-primary">SET A GOAL</button>
-				{{> app_goal_cards goals=goalCards}}
-
-			</div>
-			<div class="col-md-6">
-
 				<h4>Nearby:</h4>
 				
 			</div>
+			<div class="col-md-6">
+
+				<h4>My Goals:</h4>
+				<button id="newGoalBtn" class="btn btn-outline-primary">SET A GOAL</button>
+				<button id="hidecomplete" class="btn btn-outline-info">HIDE COMPLETED</button>
+				{{> app_goal_cards goals=goalCards}}
+
+			</div>
+			
 		</div>
 	<!-- GOALS
 		1. Render the current goals

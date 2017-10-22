@@ -16,6 +16,7 @@ router.route('/user/goals')
 	// authenticate users before allowing goals routes
 
 router.route('/user/goals/:id')
+	.put(authenticatedUser, controllers.user.updateGoal)
 	.delete(authenticatedUser, controllers.user.deleteGoal);
 
 router.route('/auth/google')

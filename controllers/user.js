@@ -72,7 +72,6 @@ const getGoals = (req, res) => {
 	// return all the goals
 	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
 		if (err) return console.log(err);
-		console.log('sending: ' + user.goals);
 		res.json({goals: user.goals});
 	});
 };
@@ -107,6 +106,27 @@ const postGoal = (req,res) => {
 	});
 };
 
+const updateGoal = (req, res) => {
+	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
+		// find the requested goal
+		console.log('update');
+		let goalIndex = user.goals.findIndex((goal) => {
+			return goal._id == req.params.id;
+		});
+		console.log(user.goals[goalIndex]);
+		console.log(req.body);
+		user.goals[goalIndex].complete = req.body.complete;
+		user.save(err => {
+			if (err) {
+				console.log(err);
+				res.json(err);
+			}
+			res.json(user.goals[goalIndex]);
+
+		});
+	});
+};
+
 const deleteGoal = (req, res) => {
 	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
 		if (err) return console.log(err);
@@ -125,7 +145,7 @@ const deleteGoal = (req, res) => {
 
 
 
-module.exports = { getFitData, postGoal, deleteGoal, getGoals };
+module.exports = { getFitData, postGoal, deleteGoal, getGoals, updateGoal };
 
 
 //****************

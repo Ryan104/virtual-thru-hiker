@@ -45,7 +45,6 @@ $(document).ready(function () {
 
 	// delete goal (delete)
 	$('#goalContainer').on('click', '.delete-goal', function () {
-		console.log('clicked delete');
 		var $goalCard = $(this).closest('.card');
 		var goalId = $goalCard.attr('data-id');
 		console.log(goalId);
@@ -60,6 +59,20 @@ $(document).ready(function () {
 	});
 
 	// mark goal complete (Put call)
+	$('#goalContainer').on('click', '.complete-goal', function () {
+		console.log('clicked complete');
+		var $goalCard = $(this).closest('.card');
+		var goalId = $goalCard.attr('data-id');
+		$.ajax({
+			method: 'PUT',
+			url: '/user/goals/' + goalId,
+			data: { complete: true },
+			success: function success(res) {
+				console.log(res);
+				$goalCard.replaceWith(renderGoalCard(res));
+			}
+		});
+	});
 });
 
 /*
