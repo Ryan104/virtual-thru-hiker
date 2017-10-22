@@ -11,7 +11,7 @@ router.route('/user/totalmiles')
 	.get(authenticatedUser, controllers.user.getFitData);
 
 router.route('/user/goals')
-	.get(authenticatedUser, (req, res) => res.json({'message': 'nothing to see here'}))
+	.get(authenticatedUser, controllers.user.getGoals)
 	.post(authenticatedUser, controllers.user.postGoal);
 	// authenticate users before allowing goals routes
 

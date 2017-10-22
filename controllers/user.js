@@ -68,6 +68,15 @@ const getFitData = (req, res) => {
 //GOAL CONTROLLERS
 //*************
 
+const getGoals = (req, res) => {
+	// return all the goals
+	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
+		if (err) return console.log(err);
+		console.log('sending: ' + user.goals);
+		res.json({goals: user.goals});
+	});
+};
+
 const postGoal = (req,res) => {
 	// req should contain json with goal name, target date, target miles
 	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
@@ -90,7 +99,7 @@ const postGoal = (req,res) => {
 		// add goal to user document
 		user.goals.push(newGoal);
 		user.save(function(err){
-			newGoal = user.goals[user.goals.length -1]
+			newGoal = user.goals[user.goals.length -1];
 			console.log(newGoal);
 			res.json(newGoal);
 		});
@@ -116,7 +125,7 @@ const deleteGoal = (req, res) => {
 
 
 
-module.exports = { getFitData, postGoal, deleteGoal };
+module.exports = { getFitData, postGoal, deleteGoal, getGoals };
 
 
 //****************

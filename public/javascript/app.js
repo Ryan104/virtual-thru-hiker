@@ -17,6 +17,15 @@ $(document).ready(function () {
 
 	// get upcomming trailmarks
 
+	// get and render all goals
+	$.get('/user/goals', function (res) {
+		console.log(res);
+		$('#goalContainer').empty();
+		res.goals.forEach(function (goal) {
+			$('#goalContainer').prepend(renderGoalCard(goal));
+		});
+	});
+
 	// open newgoal modal
 	$('#newGoalBtn').on('click', function () {
 		$('#newGoalModal').modal();
