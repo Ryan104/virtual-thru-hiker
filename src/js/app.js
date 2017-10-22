@@ -25,6 +25,25 @@ $(document).ready(() => {
 		});
 	});
 
+	$('#hideComplete').on('click', function(){
+		let btn = $(this);
+		let currentState =  btn.attr('data-state');
+		console.log(currentState);
+		let completedCards = $('#goalContainer .alert-success').closest('.card');
+		console.log(completedCards);
+		if (currentState === 'visible'){
+			// hide
+			btn.attr('data-state', 'hidden');
+			btn.text('SHOW COMPLETED');
+			completedCards.fadeOut();
+		} else {
+			// show
+			btn.attr('data-state', 'visible');
+			btn.text('HIDE COMPLETED');
+			completedCards.show();
+		}
+	});
+
 
 	// open newgoal modal
 	$('#newGoalBtn').on('click', function(){
