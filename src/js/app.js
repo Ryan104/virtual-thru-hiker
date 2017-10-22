@@ -16,6 +16,7 @@ $(document).ready(() => {
 	// get upcomming trailmarks
 
 	// get and render all goals
+	
 	$.get('/user/goals', res => {
 		console.log(res);
 		$('#goalContainer').empty();
@@ -23,6 +24,7 @@ $(document).ready(() => {
 			$('#goalContainer').prepend(renderGoalCard(goal));
 		});
 	});
+
 
 	// open newgoal modal
 	$('#newGoalBtn').on('click', function(){

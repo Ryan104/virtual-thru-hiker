@@ -18,6 +18,7 @@ $(document).ready(function () {
 	// get upcomming trailmarks
 
 	// get and render all goals
+
 	$.get('/user/goals', function (res) {
 		console.log(res);
 		$('#goalContainer').empty();
