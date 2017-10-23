@@ -1,130 +1,135 @@
+/**
+ * app.js
+ */
+
+/* set globals */
 let totalMiles = 0;
 const trailTotal = 2175;
+
 
 $(document).ready(() => {
 	console.log('js/jquery loaded');
 
-	// get user total miles
-	$.ajax({
-		url: '/user/totalmiles',
-		success: (res) => {
-			totalMiles = res.totalDistance.toFixed(1);
-			updateProgBar();
-		}
-	});
-
-	// get upcomming trailmarks
-
-	// get and render all goals
+	/* get and render user's goals and total miles */
+	getTotalMilage();
+	getCurrentGoals();
+	// TODO: get upcomming trailmarks
 	
-	$.get('/user/goals', res => {
-		console.log(res);
-		$('#goalContainer').empty();
-		res.goals.forEach((goal) => {
-			$('#goalContainer').prepend(renderGoalCard(goal));
-		});
-	});
-
-	$('#hideComplete').on('click', function(){
-		let btn = $(this);
-		let currentState =  btn.attr('data-state');
-		console.log(currentState);
-		let completedCards = $('#goalContainer .alert-success').closest('.card');
-		console.log(completedCards);
-		if (currentState === 'visible'){
-			// hide
-			btn.attr('data-state', 'hidden');
-			btn.text('SHOW COMPLETED');
-			completedCards.fadeOut();
-		} else {
-			// show
-			btn.attr('data-state', 'visible');
-			btn.text('HIDE COMPLETED');
-			completedCards.show();
-		}
-	});
-
-
-	// open newgoal modal
-	$('#newGoalBtn').on('click', function(){
-		$('#newGoalModal').modal();
-	});
-
-	// post new goal
-	$('#newGoalModal').on('click', '#saveNewGoal', function(){
-		let formContent = $(this).closest('.modal').find('form').serialize();
-		console.log(formContent);
-		// post form content
-		$.post('/user/goals?' + formContent, function(response){
-			console.log(response);
-			// prepend new goal to goals list
-			$('#goalContainer').prepend(renderGoalCard(response));
-		});
-	});
-
-	// delete goal (delete)
-	$('#goalContainer').on('click', '.delete-goal', function(){
-		let $goalCard = $(this).closest('.card');
-		let goalId = $goalCard.attr('data-id');
-		console.log(goalId);
-		$.ajax({
-			method: 'DELETE',
-			url: '/user/goals/' + goalId,
-			success: function(res){
-				console.log(res);
-				$goalCard.remove();
-			}
-		});
-	});
-
-	// mark goal complete (Put call)
-	$('#goalContainer').on('click', '.complete-goal', function(){
-		console.log('clicked complete');
-		let $goalCard = $(this).closest('.card');
-		let goalId = $goalCard.attr('data-id');
-		$.ajax({
-			method: 'PUT',
-			url: '/user/goals/' + goalId,
-			data: {complete: true},
-			success: function(res){
-				console.log(res);
-				$goalCard.replaceWith(renderGoalCard(res));
-			}
-		});
-	});
+	/* set click listeners */
+	$('#hideComplete').on('click', handleHideGoals);  // Hide/Show complete goals
+	$('#goalContainer').on('click', '.complete-goal', handleCompleteGoal);  // mark goal complete
+	$('#newGoalModal').on('click', '#saveNewGoal', handleCreateGoal);  // post new goal
+	$('#goalContainer').on('click', '.delete-goal', handleDeleteGoal);  // delete goal
+	$('#newGoalBtn').on('click', () => { $('#newGoalModal').modal(); });  // open newgoal modal
 
 });
 
-/*
- * CLICK LISTENERS
- */
 
-function updateProgBar(){
-	let percent = (totalMiles/trailTotal * 100).toFixed(2);
-	if (percent < 1) percent = 1; // minimum percent is 1 so something shows on bar
+/**************
+ * AJAX CALLS *
+ **************/
 
-	// Update Bar
-	$('#prog-total-mi').empty().append(totalMiles);
-	$('#main-progbar').attr('style', 'width: '+ percent+'%; height: 50px;');
+function getTotalMilage(){
+	/* Get req total miles and update prog bar */
+	$.ajax({
+		url: '/user/totalmiles',
+ 		success: (res) => {
+ 			totalMiles = res.totalDistance.toFixed(1);
+ 			updateProgBar();
+ 		}
+ 	});
 }
 
-// this function gets all the goals
-function getGoals(){ // TODO: THIS - it doesnt work yet
+function getCurrentGoals(){
+	/* Get user's current goals render them */
+	$.get('/user/goals', res => {
+	 	$('#goalContainer').empty(); 	/* remove spinner */
+	 	res.goals.forEach((goal) => {	/* render each goal */
+	 		$('#goalContainer').prepend(renderGoalCard(goal));
+	 	});
+	});
+}
+
+function postNewGoal(formContent){
+	 /*Post requst new goal from form and render the new goal */
+	$.post('/user/goals?' + formContent, function(response){
+		$('#goalContainer').prepend(renderGoalCard(response));
+	});
+}
+
+function updateGoalCompletion(goalId, $goalCard){
+	/* Send put req to update goal and re-render it */
 	$.ajax({
-		url: '/user/goals',
-		success: (res) => {
-			updateGoalCards(res);
+		method: 'PUT',
+		url: '/user/goals/' + goalId,
+		data: {complete: true},
+		success: function(res){
+			$goalCard.replaceWith(renderGoalCard(res));
 		}
 	});
-	//renderGoalCards();
 }
 
-// this function renders the a goal card
-function renderGoalCard(goalData){
-	let date = (new Date(goalData.target.date)).toLocaleDateString();
+function deleteGoal(goalId, $goalCard){
+	/* Send delete req and remove goal from page */
+	$.ajax({
+		method: 'DELETE',
+		url: '/user/goals/' + goalId,
+		success: function(res){
+			console.log(res);
+			$goalCard.remove();
+		}
+	});
+}
 
+
+/******************
+ * CLICK HANDLERS *
+ ******************/
+
+function handleHideGoals(){
+	let btn = $(this);
+	let currentState =  btn.attr('data-state');
+	let completedCards = $('#goalContainer .alert-success').closest('.card');
+	
+	if (currentState === 'visible'){ /* hide */
+		btn.attr('data-state', 'hidden');
+		btn.text('SHOW COMPLETED');
+		completedCards.fadeOut();
+	} else { /* show */
+		btn.attr('data-state', 'visible');
+		btn.text('HIDE COMPLETED');
+		completedCards.show();
+	}
+}
+
+function handleCreateGoal(){
+	let formContent = $(this).closest('.modal').find('form').serialize();
+	postNewGoal(formContent);
+}
+
+function handleCompleteGoal(){
+	let $goalCard = $(this).closest('.card');
+	let goalId = $goalCard.attr('data-id');
+	updateGoalCompletion(goalId, $goalCard);
+}
+
+function handleDeleteGoal(){
+	let $goalCard = $(this).closest('.card');
+	let goalId = $goalCard.attr('data-id');
+	deleteGoal(goalId, $goalCard);
+}
+
+
+/******************
+ * RENDER METHODS *
+ ******************/
+
+function renderGoalCard(goalData){
+	/* return html string for one goal card given json response data */
+	const date = (new Date(goalData.target.date)).toLocaleDateString();
 	let footer;
-	if (goalData.complete){
+
+	if (goalData.complete){ /* Conditionally render footer based on completion status */
 		footer = `<div class="alert alert-success" role="alert">Complete</div>`;
 	} else {
 		footer = `<button class="btn btn-success complete-goal">Mark Complete</button>
@@ -140,4 +145,14 @@ function renderGoalCard(goalData){
 			</div>
 		</div>
 	`;
+}
+
+function updateProgBar(){
+	/* Calculate percent completion */
+	let percent = (totalMiles/trailTotal * 100).toFixed(2);
+	if (percent < 1) percent = 1; // minimum percent is 1 so something shows on bar
+
+	/* Update Bar */
+	$('#prog-total-mi').empty().append(totalMiles);
+	$('#main-progbar').attr('style', 'width: '+ percent+'%; height: 50px;');
 }

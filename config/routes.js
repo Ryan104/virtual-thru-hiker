@@ -1,24 +1,27 @@
 const router = require('express').Router();
 const controllers = require('../controllers');
 
+/* Landing Page */
 router.route('/')
 	.get(controllers.statics.home);
 
+/* App Page */
 router.route('/app')
-	.get(authenticatedUser, controllers.app.renderApp);
+	.get(controllers.authenticatedUser, controllers.app.renderApp);
 
+/* User Data Routes */
 router.route('/user/totalmiles')
-	.get(authenticatedUser, controllers.user.getFitData);
+	.get(controllers.authenticatedUser, controllers.user.getFitData);
 
 router.route('/user/goals')
-	.get(authenticatedUser, controllers.user.getGoals)
-	.post(authenticatedUser, controllers.user.postGoal);
-	// authenticate users before allowing goals routes
+	.get(controllers.authenticatedUser, controllers.user.getGoals)
+	.post(controllers.authenticatedUser, controllers.user.postGoal);
 
 router.route('/user/goals/:id')
-	.put(authenticatedUser, controllers.user.updateGoal)
-	.delete(authenticatedUser, controllers.user.deleteGoal);
+	.put(controllers.authenticatedUser, controllers.user.updateGoal)
+	.delete(controllers.authenticatedUser, controllers.user.deleteGoal);
 
+/* Authentication Routes */
 router.route('/auth/google')
 	.get(controllers.auth.googleLogin);
 
@@ -28,11 +31,5 @@ router.route('/auth/google/callback')
 router.route('/auth/logout')
 	.get(controllers.auth.logout);
 
+
 module.exports = router;
-
-
-function authenticatedUser(req, res, next){
-	// check user authentication status
-	if(req.isAuthenticated()) return next();
-	res.redirect('/');
-}

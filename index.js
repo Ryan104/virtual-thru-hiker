@@ -1,4 +1,4 @@
-// NOTE: RUN WITH gulp start //
+/* NOTE: RUN WITH gulp start */
 
 const express = require('express');
 const app = express();
@@ -11,9 +11,9 @@ const hbs = require('hbs');
 require('dotenv').config();
 
 
-/*
- * Middleware
- */
+/**************
+ * Middleware *
+ **************/
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,20 +30,19 @@ app.use((req, res, next) => {
 	next();
 });
 
-// Congigure hbs View Engine
+/* Congigure hbs View Engine */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 hbs.registerPartials(path.join(__dirname, 'views/partials')); // set partials location
 hbs.localsAsTemplateData(app); // allow locals to be accessed from templates with @local syntax
 
-
-// Serve static files in public folder
+/* Serve static files in public folder */
 app.use(express.static('./public'));
 
 
-/*
- * Routes
- */
+/**********
+ * Routes *
+ **********/
 const routes = require('./config/routes');
 app.use(routes);
 
