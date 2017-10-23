@@ -1,10 +1,9 @@
 header {
   background-image: url("../images/title-img.jpeg");
   background-size: cover;
-  height: 30em;
+  min-height: 100vh;
   padding-top: 10em; }
   header section {
-    height: 100%;
     width: 100%;
     padding: 5%;
     background-color: rgba(0, 0, 0, 0.3);
