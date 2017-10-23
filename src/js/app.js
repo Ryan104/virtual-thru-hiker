@@ -14,6 +14,7 @@ $(document).ready(() => {
 	getTotalMilage();
 	getCurrentGoals();
 	// TODO: get upcomming trailmarks
+	getUpcomingPlaces();
 	
 	/* set click listeners */
 	$('#hideComplete').on('click', handleHideGoals);  // Hide/Show complete goals
@@ -38,6 +39,17 @@ function getTotalMilage(){
  			updateProgBar();
  		}
  	});
+}
+
+function getUpcomingPlaces(){
+	/* Gets and renders the next 3 places */
+	$.get('/user/upcoming', (res) => {
+		console.log(res);
+		$('#placesContainer').empty();	/* remove spinner */
+		res.places.forEach((place) => {	/* render each place */
+			$('#placesContainer').append(renderPlaceCard(place));
+		});
+	});
 }
 
 function getCurrentGoals(){
@@ -142,6 +154,24 @@ function renderGoalCard(goalData){
 				<h4 class="card-title">Reach ${goalData.target.name} by ${date}</h4>
 				<p class="card-text">From ${Math.round(goalData.start.distance)} to ${Math.round(goalData.target.distance)}</p>
 				${footer}
+			</div>
+		</div>
+	`;
+}
+
+function renderPlaceCard(place){
+	return `
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-10">
+						<h5 class="card-title">${place.title}</h5>
+						<p class="card-text">${place.distance} mi away</p>
+					</div>
+					<div class="col-2">
+						<img class="img-fluid" src="${place.typeImgUrl}">
+					</div>
+				</div>
 			</div>
 		</div>
 	`;
