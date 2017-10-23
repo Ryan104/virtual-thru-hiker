@@ -13,7 +13,6 @@ $(document).ready(() => {
 	/* get and render user's goals, upcoming places, and total miles */
 	/* use a promise so the user miles are updated with an api call before anything else is done */
 	let updateMilesPromise = new Promise(getTotalMilage);
-	
 	updateMilesPromise.then(() => {
 		getCurrentGoals();
 		getUpcomingPlaces();
