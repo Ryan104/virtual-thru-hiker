@@ -10,11 +10,14 @@ const trailTotal = 2175;
 $(document).ready(() => {
 	console.log('js/jquery loaded');
 
-	/* get and render user's goals and total miles */
-	getTotalMilage();
-	getCurrentGoals();
-	// TODO: get upcomming trailmarks
-	getUpcomingPlaces();
+	/* get and render user's goals, upcoming places, and total miles */
+	/* use a promise so the user miles are updated with an api call before anything else is done */
+	let updateMilesPromise = new Promise(getTotalMilage);
+	
+	updateMilesPromise.then(() => {
+		getCurrentGoals();
+		getUpcomingPlaces();
+	});
 	
 	/* set click listeners */
 	$('#hideComplete').on('click', handleHideGoals);  // Hide/Show complete goals
@@ -30,13 +33,14 @@ $(document).ready(() => {
  * AJAX CALLS *
  **************/
 
-function getTotalMilage(){
+function getTotalMilage(resolve, reject){
 	/* Get req total miles and update prog bar */
 	$.ajax({
 		url: '/user/totalmiles',
  		success: (res) => {
  			totalMiles = res.totalDistance.toFixed(1);
  			updateProgBar();
+ 			if (resolve) resolve(); /* resolve promise */
  		}
  	});
 }
