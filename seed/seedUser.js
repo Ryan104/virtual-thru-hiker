@@ -6,7 +6,7 @@ db.User.remove({}, err => {
 	db.User.create(
 	{
 	    "fitData" : {
-	        "lastUpdate" : new Date("2017-10-19T21:22:56.485Z"),
+	        "lastUpdate" : new Date("2017-06-19T21:22:56.485Z"),
 	        "totalSteps" : 0
 	    },
 	    "google" : {
@@ -17,46 +17,9 @@ db.User.remove({}, err => {
 	        "name" : "Ryan",
 	        "email" : "ryan.d.elliott@gmail.com",
 	        "image" : "https://lh4.googleusercontent.com/-MbWe9Kuwfp0/AAAAAAAAAAI/AAAAAAAAJbg/YJ14gJRtI18/photo.jpg?sz=50",
-	        "startDate" : new Date("2017-10-19T21:22:56.485Z")
+	        "startDate" : new Date("2017-06-19T21:22:56.485Z")
 	    },
-	    "goals": [
-	    	{
-	    		start: {
-	    			date: new Date("2017-10-19T21:22:56.485Z"),
-	    			distance: 0
-	    		},
-	    		target: {
-	    			name: "Gooch Mountain Shelter",
-	    			date: new Date("2017-10-24T21:22:56.485Z"),
-	    			distance: 14.9
-	    		},
-	    		complete: false
-	    	},
-	    	{
-	    		start: {
-	    			date: new Date("2017-10-20T21:22:56.485Z"),
-	    			distance: 0
-	    		},
-	    		target: {
-	    			name: "Far Away Place",
-	    			date: new Date("2017-10-28T21:22:56.485Z"),
-	    			distance: 26.2
-	    		},
-	    		complete: false
-	    	},
-	    	{
-	    		start: {
-	    			date: new Date("2017-10-19T21:22:56.485Z"),
-	    			distance: 1
-	    		},
-	    		target: {
-	    			name: "Gooch Mountain Shelter",
-	    			date: new Date("2017-10-20T21:22:56.485Z"),
-	    			distance: 5
-	    		},
-	    		complete: true
-	    	}
-	    ]
+	    "goals": []
 	}, (err, user) => {
 		console.log('user created');
 	    });
