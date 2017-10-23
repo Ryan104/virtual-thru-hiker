@@ -165,7 +165,7 @@ function renderPlaceCard(place){
 			<div class="card-body">
 				<div class="row">
 					<div class="col-10">
-						<h5 class="card-title">${place.title}</h5>
+						<h5 class="card-title">${place.name}</h5>
 						<p class="card-text">${place.distance} mi away</p>
 					</div>
 					<div class="col-2">

@@ -59,6 +59,41 @@ const getFitData = (req, res) => {
 	}
 };
 
+
+/****************
+ * TRAIL POINTS *
+ ****************/
+
+const getUpcoming = (req, res) => {
+	/* return the next 3 trailmarks from user location */
+	/* each should have Name, Distance from user, Img URL */
+	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
+		if (err) return console.log(err);
+		const currentDistance = user.getTotalDistance();
+		console.log(currentDistance);
+		/* Find upcoming points */
+
+		// NOTE: fake data
+		res.json({places: [
+			{
+				name: 'Springer Mt Shelter',
+				distance: 0.2,
+				typeImgUrl: "https://maxcdn.icons8.com/Share/icon/ios7/Travel//camping_tent_filled1600.png"
+			},
+			{
+				name: 'Black Gap Shelter',
+				distance: 1.5,
+				typeImgUrl: "https://maxcdn.icons8.com/Share/icon/ios7/Travel//camping_tent_filled1600.png"
+			},
+			{
+				name: 'Stover Creek Shelter',
+				distance: 2.5,
+				typeImgUrl: "https://maxcdn.icons8.com/Share/icon/ios7/Travel//camping_tent_filled1600.png"
+			}
+		]});
+	});
+};
+
 /*********
  * GOALS *
  *********/
@@ -136,7 +171,7 @@ const deleteGoal = (req, res) => {
 };
 
 
-module.exports = { getFitData, postGoal, deleteGoal, getGoals, updateGoal };
+module.exports = { getFitData, postGoal, deleteGoal, getGoals, updateGoal, getUpcoming };
 
 
 /********************
