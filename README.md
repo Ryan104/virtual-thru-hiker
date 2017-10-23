@@ -85,9 +85,9 @@ I was not expecting this. I was expecting to find a single number for the total 
 Trello: https://trello.com/b/5ihoZu1b/thru-hiker
 
 Mockup: 
-![mockup image]()
+![mockup image](./mockup_images/mockups.png)
 
 Prototype:
-ryan104.github.io/vth-mockups/
-ryan104.github.io/vth-mockups/app.html
+http://ryan104.github.io/vth-mockups/
+http://ryan104.github.io/vth-mockups/app.html
 
