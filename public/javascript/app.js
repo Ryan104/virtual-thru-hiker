@@ -155,7 +155,7 @@ function renderGoalCard(goalData) {
 }
 
 function renderPlaceCard(place) {
-	return '\n\t\t<div class="card">\n\t\t\t<div class="card-body">\n\t\t\t\t<div class="row">\n\t\t\t\t\t<div class="col-10">\n\t\t\t\t\t\t<h5 class="card-title">' + place.name + '</h5>\n\t\t\t\t\t\t<p class="card-text">' + place.distance + ' mi away</p>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class="col-2">\n\t\t\t\t\t\t<img class="img-fluid" src="' + place.typeImgUrl + '">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t';
+	return '\n\t\t<div class="card">\n\t\t\t<div class="card-body">\n\t\t\t\t<div class="row">\n\t\t\t\t\t<div class="col-9">\n\t\t\t\t\t\t<h5 class="card-title">' + place.name + '</h5>\n\t\t\t\t\t\t<p class="card-text">' + place.distance + ' mi away</p>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class="col-3">\n\t\t\t\t\t\t<img class="img-fluid" src="' + place.typeImgUrl + '">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t';
 }
 
 function updateProgBar() {

@@ -164,11 +164,11 @@ function renderPlaceCard(place){
 		<div class="card">
 			<div class="card-body">
 				<div class="row">
-					<div class="col-10">
+					<div class="col-9">
 						<h5 class="card-title">${place.name}</h5>
 						<p class="card-text">${place.distance} mi away</p>
 					</div>
-					<div class="col-2">
+					<div class="col-3">
 						<img class="img-fluid" src="${place.typeImgUrl}">
 					</div>
 				</div>

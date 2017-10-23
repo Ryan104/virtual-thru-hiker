@@ -69,28 +69,16 @@ const getUpcoming = (req, res) => {
 	/* each should have Name, Distance from user, Img URL */
 	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
 		if (err) return console.log(err);
+		
+		/* Find next 3 upcoming points */
 		const currentDistance = user.getTotalDistance();
-		console.log(currentDistance);
-		/* Find upcoming points */
+		db.Trailmark.find({ toStart: {$gt: currentDistance}}, {'name': 1, 'toStart': 1, 'type': 1}, {limit: 3}, (err, points) => {
+			if (err) return console.log(err);
+			
+			resPoints = processPointsForCards(points, currentDistance);
 
-		// NOTE: fake data
-		res.json({places: [
-			{
-				name: 'Springer Mt Shelter',
-				distance: 0.2,
-				typeImgUrl: "https://maxcdn.icons8.com/Share/icon/ios7/Travel//camping_tent_filled1600.png"
-			},
-			{
-				name: 'Black Gap Shelter',
-				distance: 1.5,
-				typeImgUrl: "https://maxcdn.icons8.com/Share/icon/ios7/Travel//camping_tent_filled1600.png"
-			},
-			{
-				name: 'Stover Creek Shelter',
-				distance: 2.5,
-				typeImgUrl: "https://maxcdn.icons8.com/Share/icon/ios7/Travel//camping_tent_filled1600.png"
-			}
-		]});
+			res.json({places: resPoints});
+		});
 	});
 };
 
@@ -186,4 +174,30 @@ function totalSteps(data){
 function convertToNanoS(dateStr){
 	/* convert time to nanoseconds (required by fit API) */
 	return (new Date(dateStr)).getTime() * 1000000;
+}
+
+function processPointsForCards(points, currentDistance){
+	/* Take trailmarks from db and convert to format required by frontend */
+	return points.map((point) => {
+		let typeImgUrl;
+		switch(point.type) {
+			case 'TOWN':
+				typeImgUrl = 'images/town_icon.png';
+				break;
+			case 'SHELTER':
+				typeImgUrl = 'images/tent_icon.png';
+				break;
+			case 'FEATURE':
+				typeImgUrl = 'images/mtn_icon.png';
+				break;
+			default:
+				console.log('default switch type');
+		}
+
+		return {
+			name: point.name,
+			typeImgUrl: typeImgUrl,
+			distance: (point.toStart - currentDistance).toFixed(1)
+		};
+	});
 }
