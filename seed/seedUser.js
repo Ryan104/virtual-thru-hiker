@@ -1,0 +1,63 @@
+const db = require('../models');
+
+db.User.remove({}, err => {
+	if (err) console.log(err);
+
+	db.User.create(
+	{
+	    "fitData" : {
+	        "lastUpdate" : new Date("2017-10-19T21:22:56.485Z"),
+	        "totalSteps" : 0
+	    },
+	    "google" : {
+	        "id" : 103964027083415003556,
+	        "accessToken" : "ya29.GmLqBHUjBx-tL8nMRMt4zI2dJOGQiM_e8DZGfdmqmGAS1kgezPRGxRZeQigynjJitfib-QBNNxp7eA-9cl8Lbi7h6UEMmmEtSrWK2zHNTayNwn7fkHyVcEjaE0JbvovhWeBnVw"
+	    },
+	    "profile" : {
+	        "name" : "Ryan",
+	        "email" : "ryan.d.elliott@gmail.com",
+	        "image" : "https://lh4.googleusercontent.com/-MbWe9Kuwfp0/AAAAAAAAAAI/AAAAAAAAJbg/YJ14gJRtI18/photo.jpg?sz=50",
+	        "startDate" : new Date("2017-10-19T21:22:56.485Z")
+	    },
+	    "goals": [
+	    	{
+	    		start: {
+	    			date: new Date("2017-10-19T21:22:56.485Z"),
+	    			distance: 0
+	    		},
+	    		target: {
+	    			name: "Gooch Mountain Shelter",
+	    			date: new Date("2017-10-24T21:22:56.485Z"),
+	    			distance: 14.9
+	    		},
+	    		complete: false
+	    	},
+	    	{
+	    		start: {
+	    			date: new Date("2017-10-20T21:22:56.485Z"),
+	    			distance: 0
+	    		},
+	    		target: {
+	    			name: "Far Away Place",
+	    			date: new Date("2017-10-28T21:22:56.485Z"),
+	    			distance: 26.2
+	    		},
+	    		complete: false
+	    	},
+	    	{
+	    		start: {
+	    			date: new Date("2017-10-19T21:22:56.485Z"),
+	    			distance: 1
+	    		},
+	    		target: {
+	    			name: "Gooch Mountain Shelter",
+	    			date: new Date("2017-10-20T21:22:56.485Z"),
+	    			distance: 5
+	    		},
+	    		complete: true
+	    	}
+	    ]
+	}, (err, user) => {
+		console.log('user created');
+	    });
+});

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Goal = new Schema({
+const GoalSchema = new Schema({
 	start: {
 		date: { type: Date, default: Date.now },
 		distance: Number
@@ -11,10 +11,10 @@ const Goal = new Schema({
 		date: Date,
 		distance: Number
 	},
-	complete: String // true, false, in-progress
+	complete: Boolean
 });
 
-const User = new Schema({
+const UserSchema = new Schema({
 	profile: {
 		name: String,
 		email: String,
@@ -26,11 +26,17 @@ const User = new Schema({
 		accessToken: String
 	},
 	fitData: {
-		lastUpdate: Date, // time of last update from fit API
+		lastUpdate: { type: Date, default: Date.now}, // time of last update from fit API
 		totalSteps: { type: Number, default: 0 },
-		totalDistance: { type: Number, default: 0 } // distance in miles (calc from steps)
+		stepsPerMile: { type: Number, default: 2186 }
 	},
-	goals: [Goal]
+	goals: [GoalSchema]
 });
 
-module.exports = User;
+UserSchema.methods.getTotalDistance = function(){
+	console.log('steps/mi: ' + this.fitData.stepsPerMile);
+	console.log('calc miles: ' + this.fitData.totalSteps / this.fitData.stepsPerMile);
+	return this.fitData.totalSteps / this.fitData.stepsPerMile;
+};
+
+module.exports = mongoose.model('User', UserSchema);
