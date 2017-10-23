@@ -1,21 +1,25 @@
 const request = require('request');
-const baseApiUrl = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/derived%3Acom.google.step_count.delta%3Acom.google.android.gms%3Aestimated_steps/datasets/';
-const keyParam = '?key=' + process.env.FIT_API_KEY;
 const db = require('../models');
 
-const testing = true; // prevents excessive api calls, change to false to get real data
+const baseApiUrl = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/derived%3Acom.google.step_count.delta%3Acom.google.android.gms%3Aestimated_steps/datasets/';
+const keyParam = '?key=' + process.env.FIT_API_KEY;
 
-// This route returns the latest user walking data by contacting the fit api
-// It responds with a JSON file containing the users current total distance
+const testing = false; // set to false to get real data, true to use fake api call
+
+/**************
+ * GOOGLE FIT *
+ **************/
+
 const getFitData = (req, res) => {
-	// setup API call
-	let startTime = convertToNanoS(res.locals.currentUser.fitData.lastUpdate);
-	let now = Date.now();
-	let endTime = convertToNanoS(now);
+	/**
+	 *This route returns the latest user walking data by contacting the fit api
+	 * It responds with a JSON file containing the users current total distance
+	 */
 
-	console.log('start: ' + startTime);
-	console.log('endTime: ' + endTime);
-
+	/* setup API call parameters */
+	const startTime = convertToNanoS(res.locals.currentUser.fitData.lastUpdate);
+	const now = Date.now();
+	const endTime = convertToNanoS(now);
 	const apiURL = `${baseApiUrl}${startTime}-${endTime}${keyParam}`;
 	const options = {
 		url: apiURL,
@@ -24,37 +28,28 @@ const getFitData = (req, res) => {
 		}
 	};
 	
-	// make api call
-	if (!testing){ // collect data from fit api
-
+	/* make api call */
+	if (!testing){
 	request(options, (err, response, body) => {
 		if (err) return console.log(err);
 		
-		// Parse and total step count from JSON data
-		let steps = totalSteps(JSON.parse(body).point);
-		let currentUserSteps = res.locals.currentUser.fitData.totalSteps;
-		let newStepTotal = currentUserSteps + steps;
+		/* Parse and total step count from JSON response data */
+		const steps = totalSteps(JSON.parse(body).point);
+		const currentUserSteps = res.locals.currentUser.fitData.totalSteps;
+		const newStepTotal = currentUserSteps + steps;
 
-		// check values in console
-		console.log('previous steps: ' + currentUserSteps);
-		console.log('recent steps: ' + steps);
-		console.log('new stepTotal should be: ' + newStepTotal);
-
-		// add new steps to user and change lastUpdate to now
-		db.User.findOneAndUpdate(
-			{"google.id": res.locals.currentUser.google.id},
-			{
+		/* add new steps to user and change lastUpdate to now */
+		db.User.findOneAndUpdate({"google.id": res.locals.currentUser.google.id},
+			{ /* data to update */
 				fitData: {
 					totalSteps: newStepTotal,
 					lastUpdate: now
 				}
-			}, 
+			},
+			/* respond with updated user milage */
 			{new: true},
 			(err, user) => {
 				if (err) return console.log(err);
-				console.log(user.fitData.totalSteps);
-
-				// data sent to user
 				res.json({'totalDistance': user.getTotalDistance()});
 			});
 	});
@@ -64,12 +59,12 @@ const getFitData = (req, res) => {
 	}
 };
 
-//***********
-//GOAL CONTROLLERS
-//*************
+/*********
+ * GOALS *
+ *********/
 
 const getGoals = (req, res) => {
-	// return all the goals
+	/* return all the users goals */
 	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
 		if (err) return console.log(err);
 		res.json({goals: user.goals});
@@ -77,64 +72,61 @@ const getGoals = (req, res) => {
 };
 
 const postGoal = (req,res) => {
-	// req should contain json with goal name, target date, target miles
+	/** 
+	 *Post a new goal with the form data given in the query string
+	 *The query should contain the name (destination and distance from start)
+	 *  and the target completion date.
+	 *Respond with the newly created goal
+	 */
+
 	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
 		if (err) return console.log(err);
-		// process the query string (get name and milage from str format 'name - nn.n mi')
-		let targetName = req.query.name.split(' - ')[0];
-		let targetDistance = parseFloat(req.query.name.split(' - ')[1]);
-		// create a new goal
-		let newGoal = {
+		/* create goal according to schema */
+		const newGoal = {
 			start: {
 				distance: user.getTotalDistance()
 			},
 			target: {
-				name: targetName,
+				name: req.query.name.split(' - ')[0], // parse target name from query.name
 				date: new Date(req.query.date),
-				distance: targetDistance
+				distance: parseFloat(req.query.name.split(' - ')[1]) // parse distance from query.name
 			},
 			complete: false
 		};
-		// add goal to user document
+		/* add goal to user, save, respond with the goal */
 		user.goals.push(newGoal);
-		user.save(function(err){
-			newGoal = user.goals[user.goals.length -1];
-			console.log(newGoal);
-			res.json(newGoal);
-		});
-		// save new goal to db and return new goal response
+		user.save(err => { res.json(user.goals[user.goals.length - 1]); });
 	});
 };
 
 const updateGoal = (req, res) => {
+	/**
+	 *Find goal by req param id and update its completion status with the req JSON data
+	 *Respond with the updated goal
+	 */
 	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
-		// find the requested goal
-		console.log('update');
-		let goalIndex = user.goals.findIndex((goal) => {
-			return goal._id == req.params.id;
-		});
-		console.log(user.goals[goalIndex]);
-		console.log(req.body);
+		if (err) return console.log(err);
+
+		const goalIndex = user.goals.findIndex(goal => (goal._id == req.params.id));
+
 		user.goals[goalIndex].complete = req.body.complete;
 		user.save(err => {
-			if (err) {
-				console.log(err);
-				res.json(err);
-			}
+			if (err) throw err;
 			res.json(user.goals[goalIndex]);
-
 		});
 	});
 };
 
 const deleteGoal = (req, res) => {
+	/**
+	 *Find the goal by the ID given the req params and remove it from the current user
+	 *Respond with a confirmation message
+	 */
 	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
 		if (err) return console.log(err);
-		console.log(req.params.id);
-		let goalIndex = user.goals.findIndex((goal) => {
-			return goal._id == req.params.id;
-		});
-		console.log(goalIndex);
+
+		const goalIndex = user.goals.findIndex(goal => (goal._id == req.params.id));
+
 		user.goals.splice(goalIndex, 1);
 		user.save(err => {
 			if (err) throw err;
@@ -144,28 +136,19 @@ const deleteGoal = (req, res) => {
 };
 
 
-
 module.exports = { getFitData, postGoal, deleteGoal, getGoals, updateGoal };
 
 
-//****************
-//HELPER FUNCTIONS
-//****************
+/********************
+ * HELPER FUNCTIONS *
+ ********************/
 
-// take data from fit api call and reduce into total steps
 function totalSteps(data){
-	let total = 0;
-	console.log('length: ' + data.length);
-	//TODO: use reduce instead of foreach
-	data.forEach(point => {
-		total += point.value[0].intVal;
-	});
-	return total;
+	/* take data from fit api call and reduce into total steps */
+	return data.reduce((sum, point) => sum + point.value[0].intVal, 0);
 }
 
-// convert time to nanoseconds (required by fit API)
 function convertToNanoS(dateStr){
-	const date = new Date(dateStr);
-	const dateNano = date.getTime() * 1000000;
-	return dateNano;
+	/* convert time to nanoseconds (required by fit API) */
+	return (new Date(dateStr)).getTime() * 1000000;
 }
