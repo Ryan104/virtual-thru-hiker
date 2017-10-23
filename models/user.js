@@ -40,5 +40,3 @@ UserSchema.methods.getTotalDistance = function(){
 };
 
 module.exports = mongoose.model('User', UserSchema);
-
-//2017-10-19 21:22:56.485Z

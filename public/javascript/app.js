@@ -53,7 +53,7 @@ function getCurrentGoals() {
 }
 
 function postNewGoal(formContent) {
-	/* Post requst new goal from form and render the new goal */
+	/*Post requst new goal from form and render the new goal */
 	$.post('/user/goals?' + formContent, function (response) {
 		$('#goalContainer').prepend(renderGoalCard(response));
 	});
