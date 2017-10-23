@@ -10,10 +10,13 @@ const trailTotal = 2175;
 $(document).ready(() => {
 	console.log('js/jquery loaded');
 
-	/* get and render user's goals and total miles */
-	getTotalMilage();
-	getCurrentGoals();
-	// TODO: get upcomming trailmarks
+	/* get and render user's goals, upcoming places, and total miles */
+	/* use a promise so the user miles are updated with an api call before anything else is done */
+	let updateMilesPromise = new Promise(getTotalMilage);
+	updateMilesPromise.then(() => {
+		getCurrentGoals();
+		getUpcomingPlaces();
+	});
 	
 	/* set click listeners */
 	$('#hideComplete').on('click', handleHideGoals);  // Hide/Show complete goals
@@ -29,15 +32,27 @@ $(document).ready(() => {
  * AJAX CALLS *
  **************/
 
-function getTotalMilage(){
+function getTotalMilage(resolve, reject){
 	/* Get req total miles and update prog bar */
 	$.ajax({
 		url: '/user/totalmiles',
  		success: (res) => {
  			totalMiles = res.totalDistance.toFixed(1);
  			updateProgBar();
+ 			if (resolve) resolve(); /* resolve promise */
  		}
  	});
+}
+
+function getUpcomingPlaces(){
+	/* Gets and renders the next 3 places */
+	$.get('/user/upcoming', (res) => {
+		console.log(res);
+		$('#placesContainer').empty();	/* remove spinner */
+		res.places.forEach((place) => {	/* render each place */
+			$('#placesContainer').append(renderPlaceCard(place));
+		});
+	});
 }
 
 function getCurrentGoals(){
@@ -142,6 +157,24 @@ function renderGoalCard(goalData){
 				<h4 class="card-title">Reach ${goalData.target.name} by ${date}</h4>
 				<p class="card-text">From ${Math.round(goalData.start.distance)} to ${Math.round(goalData.target.distance)}</p>
 				${footer}
+			</div>
+		</div>
+	`;
+}
+
+function renderPlaceCard(place){
+	return `
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-9">
+						<h5 class="card-title">${place.name}</h5>
+						<p class="card-text">${place.distance} mi away</p>
+					</div>
+					<div class="col-3">
+						<img class="img-fluid" src="${place.typeImgUrl}">
+					</div>
+				</div>
 			</div>
 		</div>
 	`;

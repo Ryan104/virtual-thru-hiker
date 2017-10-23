@@ -11,10 +11,13 @@ var trailTotal = 2175;
 $(document).ready(function () {
 	console.log('js/jquery loaded');
 
-	/* get and render user's goals and total miles */
-	getTotalMilage();
-	getCurrentGoals();
-	// TODO: get upcomming trailmarks
+	/* get and render user's goals, upcoming places, and total miles */
+	/* use a promise so the user miles are updated with an api call before anything else is done */
+	var updateMilesPromise = new Promise(getTotalMilage);
+	updateMilesPromise.then(function () {
+		getCurrentGoals();
+		getUpcomingPlaces();
+	});
 
 	/* set click listeners */
 	$('#hideComplete').on('click', handleHideGoals); // Hide/Show complete goals
@@ -30,14 +33,27 @@ $(document).ready(function () {
  * AJAX CALLS *
  **************/
 
-function getTotalMilage() {
+function getTotalMilage(resolve, reject) {
 	/* Get req total miles and update prog bar */
 	$.ajax({
 		url: '/user/totalmiles',
 		success: function success(res) {
 			totalMiles = res.totalDistance.toFixed(1);
 			updateProgBar();
+			if (resolve) resolve(); /* resolve promise */
 		}
+	});
+}
+
+function getUpcomingPlaces() {
+	/* Gets and renders the next 3 places */
+	$.get('/user/upcoming', function (res) {
+		console.log(res);
+		$('#placesContainer').empty(); /* remove spinner */
+		res.places.forEach(function (place) {
+			/* render each place */
+			$('#placesContainer').append(renderPlaceCard(place));
+		});
 	});
 }
 
@@ -139,6 +155,10 @@ function renderGoalCard(goalData) {
 	}
 
 	return '\n\t\t<div class="card" data-id="' + goalData._id + '">\n\t\t\t<div class="card-body">\n\t\t\t\t<h4 class="card-title">Reach ' + goalData.target.name + ' by ' + date + '</h4>\n\t\t\t\t<p class="card-text">From ' + Math.round(goalData.start.distance) + ' to ' + Math.round(goalData.target.distance) + '</p>\n\t\t\t\t' + footer + '\n\t\t\t</div>\n\t\t</div>\n\t';
+}
+
+function renderPlaceCard(place) {
+	return '\n\t\t<div class="card">\n\t\t\t<div class="card-body">\n\t\t\t\t<div class="row">\n\t\t\t\t\t<div class="col-9">\n\t\t\t\t\t\t<h5 class="card-title">' + place.name + '</h5>\n\t\t\t\t\t\t<p class="card-text">' + place.distance + ' mi away</p>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class="col-3">\n\t\t\t\t\t\t<img class="img-fluid" src="' + place.typeImgUrl + '">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t';
 }
 
 function updateProgBar() {
