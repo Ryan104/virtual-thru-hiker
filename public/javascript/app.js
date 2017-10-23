@@ -138,7 +138,7 @@ function renderGoalCard(goalData) {
 		footer = '<button class="btn btn-success complete-goal">Mark Complete</button>\n\t\t\t\t\t<button class="btn btn-danger delete-goal">Delete Goal</button>';
 	}
 
-	return '\n\t\t<div class="card" data-id="' + goalData._id + '">\n\t\t\t<div class="card-body">\n\t\t\t\t<h4 class="card-title">Reach ' + goalData.target.name + ' by ' + date + '</h4>\n\t\t\t\t<p class="card-text">From ' + goalData.start.distance + ' to ' + goalData.target.distance + '</p>\n\t\t\t\t' + footer + '\n\t\t\t</div>\n\t\t</div>\n\t';
+	return '\n\t\t<div class="card" data-id="' + goalData._id + '">\n\t\t\t<div class="card-body">\n\t\t\t\t<h4 class="card-title">Reach ' + goalData.target.name + ' by ' + date + '</h4>\n\t\t\t\t<p class="card-text">From ' + Math.round(goalData.start.distance) + ' to ' + Math.round(goalData.target.distance) + '</p>\n\t\t\t\t' + footer + '\n\t\t\t</div>\n\t\t</div>\n\t';
 }
 
 function updateProgBar() {

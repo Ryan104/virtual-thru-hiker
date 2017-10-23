@@ -140,7 +140,7 @@ function renderGoalCard(goalData){
 		<div class="card" data-id="${goalData._id}">
 			<div class="card-body">
 				<h4 class="card-title">Reach ${goalData.target.name} by ${date}</h4>
-				<p class="card-text">From ${goalData.start.distance} to ${goalData.target.distance}</p>
+				<p class="card-text">From ${Math.round(goalData.start.distance)} to ${Math.round(goalData.target.distance)}</p>
 				${footer}
 			</div>
 		</div>
