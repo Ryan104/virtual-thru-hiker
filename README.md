@@ -16,8 +16,18 @@ Now start walking!
 * `mongod` to start mongoDB
 * `node seed/seedTrail.js` to seed the trail data
 * `mocha` to test if the data was seeded successfully
+* `touch .env` and add your env variables (see below)
 * `gulp start` to start the dev server
 * Open the app in browser at `http://localhost:3000/`
+
+.env should look like this:
+```
+GOOGLE_CLIENT_ID=<your_google_client_id>
+GOOGLE_CLIENT_SECRET=<your_google_client_secret>
+BASE_URL=http://localhost:3000
+FIT_API_KEY=<your_google_fit_api_key>
+```
+You can get keys and IDs from (Google Here)[https://console.developers.google.com/flows/enableapi?apiid=fitness]
 
 To test the Fit API response:
 * Login to the app and copy your `accessToken` from the database into `fitApi_spec.js` - this token expires every hour so it needs to be from a recent login.
@@ -39,6 +49,7 @@ Tools used:
 * **PassportJS/OAuth2** express middleware sign in with google, session management, authorize and authenticate users
 * **Request** module for making API calls
 * **Handlebars** server-side view rendering
+* **dotenv** module handle environmental variables
 
 ### Development
 * **Gulp/Babel** automated processing of client javascript and SCSS
