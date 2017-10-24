@@ -54,6 +54,7 @@ function getPlaces(){
 
 		/* render each place */
 		$('#currentPlaceContainer').append(renderCurrentPlaceCard(res.current));
+		
 		res.upcoming.forEach((place) => {	
 			$('#placesContainer').append(renderUpcomingPlaceCard(place));
 		});
