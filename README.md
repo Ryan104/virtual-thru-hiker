@@ -27,7 +27,7 @@ GOOGLE_CLIENT_SECRET=<your_google_client_secret>
 BASE_URL=http://localhost:3000
 FIT_API_KEY=<your_google_fit_api_key>
 ```
-You can get keys and IDs from (Google Here)[https://console.developers.google.com/flows/enableapi?apiid=fitness]
+You can get keys and IDs from [Google Here](https://console.developers.google.com/flows/enableapi?apiid=fitness)
 
 To test the Fit API response:
 * Login to the app and copy your `accessToken` from the database into `fitApi_spec.js` - this token expires every hour so it needs to be from a recent login.
