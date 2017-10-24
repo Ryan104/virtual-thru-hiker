@@ -76,8 +76,9 @@ const getPlaces = (req, res) => {
 			if (err) return console.log(err);
 			
 			resPoints = processPointsForCards(points, currentDistance);
+			currentPoint = {name: 'Springer Mountain'};
 
-			res.json({upcoming: resPoints});
+			res.json({upcoming: resPoints, current: currentPoint});
 		});
 	});
 };
