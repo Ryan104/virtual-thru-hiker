@@ -64,7 +64,7 @@ const getFitData = (req, res) => {
  * TRAIL POINTS *
  ****************/
 
-const getUpcoming = (req, res) => {
+const getPlaces = (req, res) => {
 	/* return the next 3 trailmarks from user location */
 	/* each should have Name, Distance from user, Img URL */
 	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
@@ -77,7 +77,7 @@ const getUpcoming = (req, res) => {
 			
 			resPoints = processPointsForCards(points, currentDistance);
 
-			res.json({places: resPoints});
+			res.json({upcoming: resPoints});
 		});
 	});
 };
@@ -159,7 +159,7 @@ const deleteGoal = (req, res) => {
 };
 
 
-module.exports = { getFitData, postGoal, deleteGoal, getGoals, updateGoal, getUpcoming };
+module.exports = { getFitData, postGoal, deleteGoal, getGoals, updateGoal, getPlaces };
 
 
 /********************

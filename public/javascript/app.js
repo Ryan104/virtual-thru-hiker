@@ -16,7 +16,7 @@ $(document).ready(function () {
 	var updateMilesPromise = new Promise(getTotalMilage);
 	updateMilesPromise.then(function () {
 		getCurrentGoals();
-		getUpcomingPlaces();
+		getPlaces();
 	});
 
 	/* set click listeners */
@@ -45,12 +45,12 @@ function getTotalMilage(resolve, reject) {
 	});
 }
 
-function getUpcomingPlaces() {
+function getPlaces() {
 	/* Gets and renders the next 3 places */
-	$.get('/user/upcoming', function (res) {
+	$.get('/user/places', function (res) {
 		console.log(res);
 		$('#placesContainer').empty(); /* remove spinner */
-		res.places.forEach(function (place) {
+		res.upcoming.forEach(function (place) {
 			/* render each place */
 			$('#placesContainer').append(renderPlaceCard(place));
 		});
