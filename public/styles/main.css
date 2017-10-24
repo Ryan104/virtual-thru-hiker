@@ -35,6 +35,13 @@ main .google-login-link {
 .about-section p {
   text-align: justify; }
 
+/* bookmark anchors */
+a.anchor {
+  display: block;
+  position: relative;
+  top: -60px;
+  visibility: hidden; }
+
 .app-body {
   background-color: #eee; }
 
