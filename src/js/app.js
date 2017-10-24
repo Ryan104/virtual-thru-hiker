@@ -15,7 +15,7 @@ $(document).ready(() => {
 	let updateMilesPromise = new Promise(getTotalMilage);
 	updateMilesPromise.then(() => {
 		getCurrentGoals();
-		getUpcomingPlaces();
+		getPlaces();
 	});
 	
 	/* set click listeners */
@@ -44,13 +44,19 @@ function getTotalMilage(resolve, reject){
  	});
 }
 
-function getUpcomingPlaces(){
+function getPlaces(){
 	/* Gets and renders the next 3 places */
-	$.get('/user/upcoming', (res) => {
+	$.get('/user/places', (res) => {
 		console.log(res);
-		$('#placesContainer').empty();	/* remove spinner */
-		res.places.forEach((place) => {	/* render each place */
-			$('#placesContainer').append(renderPlaceCard(place));
+		/* remove spinner */
+		$('#placesContainer').empty();	
+		$('#currentPlaceContainer').empty();
+
+		/* render each place */
+		$('#currentPlaceContainer').append(renderCurrentPlaceCard(res.current));
+		
+		res.upcoming.forEach((place) => {	
+			$('#placesContainer').append(renderUpcomingPlaceCard(place));
 		});
 	});
 }
@@ -162,7 +168,19 @@ function renderGoalCard(goalData){
 	`;
 }
 
-function renderPlaceCard(place){
+function renderCurrentPlaceCard(place){
+	return `
+	<div class="card">
+		<img class="card-img-top" src="https://images.pexels.com/photos/91224/pexels-photo-91224.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb">
+		<div class="card-body">
+			<h4 class="card-title">${place.name}</h4>
+			<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum nec vestibulum sapien. Duis vestibulum ullamcorper metus, quis sagittis ex laoreet ut. Fusce sed libero nisi. Vestibulum placerat, justo a tristique elementum, magna arcu euismod arcu, nec maximus diam nulla posuere nulla. Nulla facilisi. Nam pretium libero vel elementum bibendum.</p>
+		</div>
+	</div>
+	`;
+}
+
+function renderUpcomingPlaceCard(place){
 	return `
 		<div class="card">
 			<div class="card-body">

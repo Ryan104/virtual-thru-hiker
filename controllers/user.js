@@ -64,20 +64,24 @@ const getFitData = (req, res) => {
  * TRAIL POINTS *
  ****************/
 
-const getUpcoming = (req, res) => {
-	/* return the next 3 trailmarks from user location */
+const getPlaces = (req, res) => {
+	/* return the next 3 and last 1 trailmark from user location */
 	/* each should have Name, Distance from user, Img URL */
 	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
 		if (err) return console.log(err);
-		
 		/* Find next 3 upcoming points */
 		const currentDistance = user.getTotalDistance();
-		db.Trailmark.find({ toStart: {$gt: currentDistance}}, {'name': 1, 'toStart': 1, 'type': 1}, {limit: 3}, (err, points) => {
+		db.Trailmark.find({ toStart: {$gt: currentDistance}}, {'name': 1, 'toStart': 1, 'type': 1}, {limit: 3}, (err, nextPoints) => {
 			if (err) return console.log(err);
-			
-			resPoints = processPointsForCards(points, currentDistance);
-
-			res.json({places: resPoints});
+			/* Find last point passed */
+			db.Trailmark.find({ toStart: {$lte: currentDistance}}, {'name': 1, 'type': 1}, {sort: {'toEnd': 1}, limit: 1}, (err, currPoint) => {
+				if (err) return console.log(err);
+				/* response */
+				res.json({
+					upcoming: processPointsForCards(nextPoints, currentDistance), 
+					current: currPoint[0]
+				});
+			});
 		});
 	});
 };
@@ -159,7 +163,7 @@ const deleteGoal = (req, res) => {
 };
 
 
-module.exports = { getFitData, postGoal, deleteGoal, getGoals, updateGoal, getUpcoming };
+module.exports = { getFitData, postGoal, deleteGoal, getGoals, updateGoal, getPlaces };
 
 
 /********************
