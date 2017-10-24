@@ -1,4 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
+$titleFont: 'Permanent Marker', cursive;
 
+.navbar-brand{
+	font-family: $titleFont;
+}
 /* Full height header image on landing page */
 header {
 	background-image: url('../images/title-img.jpeg');
@@ -13,6 +18,10 @@ header {
 		padding: 5%;
 		background-color: rgba(0,0,0,0.3);
 		color: white;
+
+		h1 {
+			font-family: $titleFont;
+		}
 	}
 }
 
