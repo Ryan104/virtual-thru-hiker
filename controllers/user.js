@@ -76,9 +76,12 @@ const getPlaces = (req, res) => {
 			if (err) return console.log(err);
 			
 			resPoints = processPointsForCards(points, currentDistance);
-			currentPoint = {name: 'Springer Mountain'};
-
-			res.json({upcoming: resPoints, current: currentPoint});
+			let currentPoint = {name: 'Springer Mountain'};
+			
+			db.Trailmark.find({ toStart: {$lte: currentDistance}}, {'name': 1, 'type': 1}, {sort: {'toEnd': 1}, limit: 1}, (err, point) => {
+				currentPoint = point[0];
+				res.json({upcoming: resPoints, current: currentPoint});
+			});
 		});
 	});
 };
