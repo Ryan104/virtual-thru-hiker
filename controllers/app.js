@@ -33,18 +33,3 @@ function mapTrailMarks(mark){
 		mileMark: mark.toStart
 	};
 }
-
-// process goals data
-/* not needed... rendering goals clientside
-function processGoals(userGoalsArr){
-	return userGoalsArr.map(goal => {
-		let targetDate = new Date(goal.target.date);
-		return {
-			goalId: goal._id,
-			titleText: `Reach ${goal.target.name} by ${targetDate.toLocaleDateString()}`,
-			bodyText: `From ${goal.start.distance} to ${goal.target.distance}`,
-			complete: goal.complete
-		};
-	});
-}
-*/
