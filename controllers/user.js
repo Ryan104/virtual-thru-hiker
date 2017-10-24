@@ -59,6 +59,33 @@ const getFitData = (req, res) => {
 	}
 };
 
+
+/****************
+ * TRAIL POINTS *
+ ****************/
+
+const getPlaces = (req, res) => {
+	/* return the next 3 and last 1 trailmark from user location */
+	/* each should have Name, Distance from user, Img URL */
+	db.User.findOne({"google.id": res.locals.currentUser.google.id}, (err, user) => {
+		if (err) return console.log(err);
+		/* Find next 3 upcoming points */
+		const currentDistance = user.getTotalDistance();
+		db.Trailmark.find({ toStart: {$gt: currentDistance}}, {'name': 1, 'toStart': 1, 'type': 1}, {limit: 3}, (err, nextPoints) => {
+			if (err) return console.log(err);
+			/* Find last point passed */
+			db.Trailmark.find({ toStart: {$lte: currentDistance}}, {'name': 1, 'type': 1}, {sort: {'toEnd': 1}, limit: 1}, (err, currPoint) => {
+				if (err) return console.log(err);
+				/* response */
+				res.json({
+					upcoming: processPointsForCards(nextPoints, currentDistance), 
+					current: currPoint[0]
+				});
+			});
+		});
+	});
+};
+
 /*********
  * GOALS *
  *********/
@@ -136,7 +163,7 @@ const deleteGoal = (req, res) => {
 };
 
 
-module.exports = { getFitData, postGoal, deleteGoal, getGoals, updateGoal };
+module.exports = { getFitData, postGoal, deleteGoal, getGoals, updateGoal, getPlaces };
 
 
 /********************
@@ -151,4 +178,30 @@ function totalSteps(data){
 function convertToNanoS(dateStr){
 	/* convert time to nanoseconds (required by fit API) */
 	return (new Date(dateStr)).getTime() * 1000000;
+}
+
+function processPointsForCards(points, currentDistance){
+	/* Take trailmarks from db and convert to format required by frontend */
+	return points.map((point) => {
+		let typeImgUrl;
+		switch(point.type) {
+			case 'TOWN':
+				typeImgUrl = 'images/town_icon.png';
+				break;
+			case 'SHELTER':
+				typeImgUrl = 'images/tent_icon.png';
+				break;
+			case 'FEATURE':
+				typeImgUrl = 'images/mtn_icon.png';
+				break;
+			default:
+				console.log('default switch type');
+		}
+
+		return {
+			name: point.name,
+			typeImgUrl: typeImgUrl,
+			distance: (point.toStart - currentDistance).toFixed(1)
+		};
+	});
 }

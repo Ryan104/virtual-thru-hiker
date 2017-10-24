@@ -13,6 +13,9 @@ router.route('/app')
 router.route('/user/totalmiles')
 	.get(controllers.authenticatedUser, controllers.user.getFitData);
 
+router.route('/user/places')
+	.get(controllers.authenticatedUser, controllers.user.getPlaces);
+
 router.route('/user/goals')
 	.get(controllers.authenticatedUser, controllers.user.getGoals)
 	.post(controllers.authenticatedUser, controllers.user.postGoal);

@@ -11,10 +11,13 @@ var trailTotal = 2175;
 $(document).ready(function () {
 	console.log('js/jquery loaded');
 
-	/* get and render user's goals and total miles */
-	getTotalMilage();
-	getCurrentGoals();
-	// TODO: get upcomming trailmarks
+	/* get and render user's goals, upcoming places, and total miles */
+	/* use a promise so the user miles are updated with an api call before anything else is done */
+	var updateMilesPromise = new Promise(getTotalMilage);
+	updateMilesPromise.then(function () {
+		getCurrentGoals();
+		getPlaces();
+	});
 
 	/* set click listeners */
 	$('#hideComplete').on('click', handleHideGoals); // Hide/Show complete goals
@@ -30,14 +33,32 @@ $(document).ready(function () {
  * AJAX CALLS *
  **************/
 
-function getTotalMilage() {
+function getTotalMilage(resolve, reject) {
 	/* Get req total miles and update prog bar */
 	$.ajax({
 		url: '/user/totalmiles',
 		success: function success(res) {
 			totalMiles = res.totalDistance.toFixed(1);
 			updateProgBar();
+			if (resolve) resolve(); /* resolve promise */
 		}
+	});
+}
+
+function getPlaces() {
+	/* Gets and renders the next 3 places */
+	$.get('/user/places', function (res) {
+		console.log(res);
+		/* remove spinner */
+		$('#placesContainer').empty();
+		$('#currentPlaceContainer').empty();
+
+		/* render each place */
+		$('#currentPlaceContainer').append(renderCurrentPlaceCard(res.current));
+
+		res.upcoming.forEach(function (place) {
+			$('#placesContainer').append(renderUpcomingPlaceCard(place));
+		});
 	});
 }
 
@@ -139,6 +160,14 @@ function renderGoalCard(goalData) {
 	}
 
 	return '\n\t\t<div class="card" data-id="' + goalData._id + '">\n\t\t\t<div class="card-body">\n\t\t\t\t<h4 class="card-title">Reach ' + goalData.target.name + ' by ' + date + '</h4>\n\t\t\t\t<p class="card-text">From ' + Math.round(goalData.start.distance) + ' to ' + Math.round(goalData.target.distance) + '</p>\n\t\t\t\t' + footer + '\n\t\t\t</div>\n\t\t</div>\n\t';
+}
+
+function renderCurrentPlaceCard(place) {
+	return '\n\t<div class="card">\n\t\t<img class="card-img-top" src="https://images.pexels.com/photos/91224/pexels-photo-91224.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb">\n\t\t<div class="card-body">\n\t\t\t<h4 class="card-title">' + place.name + '</h4>\n\t\t\t<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum nec vestibulum sapien. Duis vestibulum ullamcorper metus, quis sagittis ex laoreet ut. Fusce sed libero nisi. Vestibulum placerat, justo a tristique elementum, magna arcu euismod arcu, nec maximus diam nulla posuere nulla. Nulla facilisi. Nam pretium libero vel elementum bibendum.</p>\n\t\t</div>\n\t</div>\n\t';
+}
+
+function renderUpcomingPlaceCard(place) {
+	return '\n\t\t<div class="card">\n\t\t\t<div class="card-body">\n\t\t\t\t<div class="row">\n\t\t\t\t\t<div class="col-9">\n\t\t\t\t\t\t<h5 class="card-title">' + place.name + '</h5>\n\t\t\t\t\t\t<p class="card-text">' + place.distance + ' mi away</p>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class="col-3">\n\t\t\t\t\t\t<img class="img-fluid" src="' + place.typeImgUrl + '">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t';
 }
 
 function updateProgBar() {
