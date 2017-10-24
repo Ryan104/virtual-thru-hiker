@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
+$titleFont: 'Permanent Marker', cursive;
+
+.navbar-brand{
+	font-family: $titleFont;
+}
+/* Full height header image on landing page */
 header {
 	background-image: url('../images/title-img.jpeg');
 	background-size: cover;
@@ -5,19 +12,26 @@ header {
 	min-height: 100vh;
 	padding-top: 10em;
 
+	/* Text area within header image */
 	section{
 		width: 100%;
 		padding: 5%;
 		background-color: rgba(0,0,0,0.3);
 		color: white;
+
+		h1 {
+			font-family: $titleFont;
+		}
 	}
 }
+
 
 main {
 	section {
 		margin-bottom: 100px;
 	}
 
+	/* Instructions section */
 	.get-started{
 		display: flex;
 		flex-direction: column;
@@ -30,7 +44,8 @@ main {
 			margin-top: 4em;
 		}
 	}
-
+	
+	/* Google badges */
 	.google-login-link {
 		cursor: pointer;
 
@@ -41,6 +56,7 @@ main {
 	}
 }
 
+/* Info about the app w/ image icons */
 .about-section {
 	img {
 		width: 190px;
@@ -50,4 +66,12 @@ main {
 	p {
 		text-align: justify;
 	}
+}
+
+/* bookmark anchors */
+a.anchor {
+    display: block;
+    position: relative;
+    top: -60px;
+    visibility: hidden;
 }
